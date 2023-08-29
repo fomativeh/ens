@@ -1,4 +1,4 @@
-import styles from "../../../styles/AdminLogin.module.css"
+import styles from "./style.module.css"
 
 export default function Login() {
   return (

@@ -8,10 +8,16 @@ export default function Sidebar() {
   return (
     <nav className={styles.sidebar}>
       <div className={styles.links}>
-        <Link className={`${pathname === "/admin" ? styles.current : ""}`} href="/">
+        <Link
+          className={`${pathname === "/admin" ? styles.current : ""}`}
+          href="/admin"
+        >
           Home
         </Link>
-        <Link className={`${pathname === "/ratings" ? styles.current : ""}`} href="#">
+        <Link
+          className={`${pathname === "/admin/ratings" ? styles.current : ""}`}
+          href="/admin/ratings"
+        >
           Domain Rating
         </Link>
       </div>
