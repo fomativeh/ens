@@ -1,0 +1,9 @@
+.container {
+  width: 82%;
+  margin-left: auto;
+  padding: 1px;
+}
+
+.container .flex {
+  margin-top: 81px;
+}
