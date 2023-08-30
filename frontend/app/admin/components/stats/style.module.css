@@ -1,0 +1,17 @@
+.stats {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  width: 753px;
+  height: 149px;
+  border-radius: 8px;
+  border: 2px solid #752989;
+  justify-content: space-around;
+  margin-bottom: 57px;
+}
+
+.stats .line {
+  width: 1.5px;
+  height: 119px;
+  background: #752989;
+}
