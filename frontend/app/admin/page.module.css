@@ -5,5 +5,7 @@
 }
 
 .container .flex {
+  display:  flex;
+  gap: 23px;
   margin-top: 81px;
 }

@@ -1,0 +1,21 @@
+.container {
+  padding: 24px 28px;
+  background: #a484e1;
+  width: 364px;
+  height: 675px;
+  border-radius: 8px;
+}
+
+.container .head {
+  color: #f0ebfa;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 17px;
+}
+
+.container .domains{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
