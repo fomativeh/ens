@@ -1,7 +1,7 @@
 import DomainBlock from "./block";
 import styles from "./style.module.css";
 
-export default function RecentlyAppraised() {
+const RecentlyAppraised: React.FC = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.head}>Recently Appraised Domains</h1>
@@ -17,4 +17,6 @@ export default function RecentlyAppraised() {
       </div>
     </div>
   );
-}
+};
+
+export default RecentlyAppraised;

@@ -1,7 +1,11 @@
 import Link from "next/link";
 import styles from "./style.module.css";
 
-export default function DomainBlock({ domainName }) {
+interface DomainBlockProps {
+  domainName: string;
+}
+
+const DomainBlock: React.FC<DomainBlockProps> = ({ domainName }) => {
   return (
     <div className={styles.block}>
       <p>{domainName}.eth</p>
@@ -10,4 +14,6 @@ export default function DomainBlock({ domainName }) {
       </Link>
     </div>
   );
-}
+};
+
+export default DomainBlock;

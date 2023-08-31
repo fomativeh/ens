@@ -1,13 +1,18 @@
-import RecentlyAppraised from "./components/recently-appraised";
-import StarRating from "./components/star-rating";
-import Stats from "./components/stats";
-import UserInflow from "./components/user-inflow";
+"use client";
+import { motion } from "framer-motion";
 import styles from "./page.module.css";
+import RecentlyAppraised from "./components/recently-appraised";
+import UserInflow from "./components/user-inflow";
+import Stats from "./components/stats";
 
-export default function Admin() {
+const Admin: React.FC = () => {
   return (
     <>
-      <div className={styles.container}>
+      <motion.div
+        animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
+        className={styles.container}
+      >
         <div className={styles.flex}>
           <div className={styles.left}>
             <Stats />
@@ -17,7 +22,9 @@ export default function Admin() {
             <RecentlyAppraised />
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
-}
+};
+
+export default Admin;

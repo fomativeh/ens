@@ -1,10 +1,16 @@
+"use client";
+import { motion } from "framer-motion";
+import styles from "./page.module.css";
 import UserDomain from "../components/user-domain";
-import styles from "./style.module.css";
 
-export default function Ratings() {
+const Ratings: React.FC = () => {
   return (
     <>
-      <div className={styles.container}>
+      <motion.div
+        animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
+        className={styles.container}
+      >
         <div className={styles.main}>
           <p className={styles.head}>
             Here’s where you can see all searches by subscribed users, and also
@@ -32,7 +38,8 @@ export default function Ratings() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
-}
+};
+export default Ratings;

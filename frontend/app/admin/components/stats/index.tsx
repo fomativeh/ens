@@ -1,7 +1,7 @@
 import StatBlock from "./stat-block";
 import styles from "./style.module.css";
 
-export default function Stats() {
+const Stats: React.FC = () => {
   return (
     <div className={styles.stats}>
       <StatBlock tittle="Total Users" value="3284" />
@@ -13,4 +13,6 @@ export default function Stats() {
       <StatBlock tittle="Domains Appraised" value="65,231" />
     </div>
   );
-}
+};
+
+export default Stats;
