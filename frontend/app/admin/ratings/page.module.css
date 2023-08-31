@@ -1,0 +1,33 @@
+.container {
+  width: 82%;
+  margin-left: auto;
+  padding: 1px 0 50px;
+}
+
+.container .main {
+  margin-top: 44px;
+}
+
+.container .main .head {
+  margin-bottom: 66px;
+}
+
+.container .main .domains {
+  padding: 14px 36px 56px;
+  background: #a484e1;
+  border-radius: 8px;
+  max-width: 855px;
+}
+
+.container .main .domains .top {
+  color: #f0ebfa;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 14px;
+}
+
+.container .main .domains .blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

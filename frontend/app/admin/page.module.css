@@ -5,5 +5,9 @@
 }
 
 .container .flex {
+  display:  flex;
+  justify-content: space-between;
+  padding-right: 33px;
+  gap: 23px;
   margin-top: 81px;
 }

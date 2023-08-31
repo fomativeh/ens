@@ -1,0 +1,54 @@
+.container {
+  padding: 56px 100px;
+  width: 550px;
+  height: 726px;
+  border-radius: 8px;
+  background: var(--white, #fff);
+}
+
+.container .head {
+  color: var(--pink-original, #b253cb);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 38px;
+  margin-bottom: 111px;
+}
+
+.container form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.container form .input p {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.container form .input input {
+  width: 292px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid var(--gray-300, #d0d5dd);
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+}
+
+.container form button[type="submit"] {
+  width: 292px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--gray-300, #d0d5dd);
+  background: var(--purple-original, #6934cd);
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+  color: var(--white, #fff);
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 50px;
+}
+
+.container form button[type="submit"]:hover {
+  background: var(--pink-light-2, #edd8f3);
+  color: var(--purple---dark-1, #49238f);
+}
