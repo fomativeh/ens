@@ -1,4 +1,4 @@
-import DomainBlock from "./domain-block";
+import DomainBlock from "./block";
 import styles from "./style.module.css";
 
 export default function RecentlyAppraised() {

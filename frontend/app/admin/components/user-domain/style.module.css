@@ -1,0 +1,35 @@
+.user_domain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 10px 11px 94px;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0px 2px 2px 0px rgba(6, 88, 147, 0.25);
+  color: #1f0f3d;
+}
+
+.user_domain .user_name{
+    margin-left: 70px;
+}
+
+.user_domain .rating {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+.user_domain .rating .send {
+  padding: 6px 8px;
+  background: #6934cd;
+  border-radius: 4px;
+  border: none;
+  color: #f0ebfa;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.user_domain .rating .send:hover {
+  background: #a484e1;
+}
