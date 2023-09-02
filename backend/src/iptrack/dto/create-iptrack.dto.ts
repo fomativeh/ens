@@ -2,7 +2,7 @@ import { IsString, IsInt, IsOptional, IsDate } from 'class-validator';
 
 export class CreateIptrackDto {
   @IsString()
-  readonly ip: string;
+  readonly domain: string;
 
   //   @IsInt()
   //   @IsOptional()

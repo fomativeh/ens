@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Ip,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { IptrackService } from './iptrack.service';
 import { CreateIptrackDto } from './dto/create-iptrack.dto';
 import { UpdateIptrackDto } from './dto/update-iptrack.dto';
@@ -8,8 +19,17 @@ export class IptrackController {
   constructor(private readonly iptrackService: IptrackService) {}
 
   @Post()
-  create(@Body() createIptrackDto: CreateIptrackDto) {
-    return this.iptrackService.create(createIptrackDto);
+  async create(@Ip() ip: string, @Body() createIptrackDto: CreateIptrackDto) {
+    try {
+      const domain = await this.iptrackService.create({createIptrackDto, ip});
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Domain found',
+        data: domain,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Get()
