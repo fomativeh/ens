@@ -7,6 +7,12 @@ export class User extends Document {
   email: string;
 
   @Prop()
+  firstName: string;
+
+  @Prop()
+  lastName: string;
+
+  @Prop()
   password: string;
 
   @Prop({ default: false })

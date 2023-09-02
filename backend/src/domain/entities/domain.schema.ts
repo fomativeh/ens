@@ -10,6 +10,12 @@ export class Domain extends Document {
   appraisedValue: number;
 
   @Prop()
+  valueUsd: number;
+
+  @Prop()
+  rating: number;
+
+  @Prop()
   lastAppraisedAt: Date;
 
   @Prop()

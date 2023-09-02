@@ -8,7 +8,6 @@ import { PaymentService } from './payment/payment.service';
 import { DomainModule } from './domain/domain.module';
 import { SubscriptionService } from './subscription/subscription.service';
 import { PlanModule } from './plan/plan.module';
-import { PlanModule } from './plan/plan.module';
 
 @Module({
   imports: [
