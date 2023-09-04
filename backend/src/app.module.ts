@@ -8,9 +8,16 @@ import { PaymentService } from './payment/payment.service';
 import { DomainModule } from './domain/domain.module';
 import { SubscriptionService } from './subscription/subscription.service';
 import { PlanModule } from './plan/plan.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AtGuard } from './common/guards';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
     MongooseModule.forRoot('mongodb://localhost/nest'),
     UserModule,
     IptrackModule,
@@ -18,6 +25,6 @@ import { PlanModule } from './plan/plan.module';
     PlanModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PaymentService, SubscriptionService],
+  providers: [AppService, PaymentService, SubscriptionService, { provide: APP_GUARD, useClass: AtGuard }],
 })
-export class AppModule {}
+export class AppModule { } 
