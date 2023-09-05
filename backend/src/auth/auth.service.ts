@@ -14,20 +14,28 @@ import {
 } from 'src/lib';
 import { SuccessReponse } from 'src/lib/success-response-handler';
 import { Success } from 'src/types';
+import { Plan } from 'src/plan/entities/plan.schema';
+import { User } from 'src/user/entities/user.schema';
+import { HashingService } from 'src/services/hashing/hashing.service';
 
 dotenv.config();
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel('User') private readonly userModel: Model<UserDto>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Plan.name) private readonly plansModel: Model<Plan>,
+    private hashingService: HashingService,
     private readonly jwtService: JwtService,
   ) {}
 
   async signUp(dto: CreateUserDto): Promise<Tokens> {
     try {
       if (!dto.firstname) {
-        throw new HttpException('firstname is required', HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          'firstname is required',
+          HttpStatus.BAD_REQUEST,
+        );
       }
 
       if (!dto.lastname) {
@@ -41,7 +49,7 @@ export class AuthService {
       if (!dto.password) {
         throw new HttpException('password is required', HttpStatus.BAD_REQUEST);
       }
-      
+
       const userExists = await this.userModel
         .findOne({ email: dto.email })
         .exec();
@@ -50,12 +58,20 @@ export class AuthService {
         throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
       }
 
-      const hash = await this.hashData(dto.password);
+      // get selected plan
+      const plan = await this.plansModel.findOne({ name: dto.plan });
+
+      if (!plan) {
+        throw new HttpException("Plan doesn't exist", HttpStatus.BAD_REQUEST);
+      }
+
+      const hash = await this.hashingService.hashData(dto.password);
       const newUser = new this.userModel({
         firstname: dto.firstname,
         lastname: dto.lastname,
         email: dto.email,
         password: hash,
+        subscriptionPlan: plan._id,
       });
 
       const user = await newUser.save();
@@ -64,6 +80,7 @@ export class AuthService {
       await this.updateRtHash(user._id.toString(), tokens.refresh_token);
       return tokens;
     } catch (error) {
+      console.log(error.message);
       CatchExceptionHandler(error);
     }
   }
@@ -168,10 +185,6 @@ export class AuthService {
     }
   }
 
-  hashData(data: string): Promise<string> {
-    return bcrypt.hash(data, 10);
-  }
-
   async getTokens(_id: string, email: string): Promise<Tokens> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
@@ -197,7 +210,7 @@ export class AuthService {
   }
 
   async updateRtHash(_id: string, refreshToken: string): Promise<void> {
-    const hash = await this.hashData(refreshToken);
+    const hash = await this.hashingService.hashData(refreshToken);
     await this.userModel.updateOne({ _id }, { hashedRt: hash }).exec();
   }
 }
