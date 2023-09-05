@@ -1,0 +1,35 @@
+import FooterLinksWrapper from "../components/FooterLinksWrapper";
+import footerData from "../utils/footerData";
+import logo from "../public/assets/images/logo.svg";
+import Image from "next/image";
+
+const Footer: React.FC = () => {
+  return (
+    <section className="flex flex-col w-full justify-start items-center bg-[#fff]">
+      <section className="w-full flex justify-evenly items-start py-[40px] px-[60px]">
+        {footerData.length > 0 &&
+          footerData.map((eachData) => {
+            return (
+              <FooterLinksWrapper
+                title={eachData.title}
+                links={eachData.links}
+              />
+            );
+          })}
+      </section>
+
+      <div className="mt-[20px] w-full bg-[#7d99d1] h-[1px]"></div>
+      <section className="w-full flex items-center py-[30px] px-[80px]">
+        <figure className="relative w-[200px] h-[200px] mr-[40%]">
+          <Image src={logo} alt={"Footer logo"} fill />
+        </figure>
+
+        <span className="text-[#98A2B3]">
+          © 2023 Domain plug UI. All rights reserved.
+        </span>
+      </section>
+    </section>
+  );
+};
+
+export default Footer;

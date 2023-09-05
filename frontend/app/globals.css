@@ -1,3 +1,7 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -19,4 +23,9 @@ a {
 
 button {
   cursor: pointer;
+}
+
+
+.hero{
+  height: calc(100vh - 80px);
 }
