@@ -1,15 +1,22 @@
+"use client"
 import Image from "next/image";
 import Navbar from "../../components/Navbar";
 import orderImg from "../../public/assets/images/order.svg";
 import check from "../../public/assets/icons/check.svg";
 import Footer from "../../components/Footer";
-import { Questions } from "../subscription/page";
 import Button from "../../components/Button";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { NavModalContext } from "../../context/NavModalContext";
+import NavModal from "../components/NavModal";
+import { Questions } from "../subscription/components/Questions";
 
 const ConfirmOrder: React.FC = () => {
+  const { modalOpen, setModalOpen } = useContext(NavModalContext);
   return (
     <main className="overflow-x-hidden flex flex-col min-h-screen justify-start items-center bg-bodyPurple pt-[80px]">
-      <Navbar />
+      <Navbar setModalOpen={setModalOpen} modalOpen={modalOpen} />
+
+      {modalOpen && <NavModal setModalOpen={setModalOpen} />}
       <section className="hero w-full flex justify-center items-center">
         <section
           className="h-[100vh] desktopLG:h-[60%] w-full flex border-solid flex-col justify-start items-center
@@ -22,7 +29,9 @@ const ConfirmOrder: React.FC = () => {
           </section>
 
           <section className="h-full w-full desktopLG:w-[45%] flex flex-col justify-start items-center desktopLG:mb-0 mb-[120px]">
-            <h1 className="font-bold text-[30px] desktopLG:text-[50px] max-w-[350px] desktopLG:max-w-fit text-center tablet:text-[4vw]">Confirm your order</h1>
+            <h1 className="font-bold text-[30px] desktopLG:text-[50px] max-w-[350px] desktopLG:max-w-fit text-center tablet:text-[4vw]">
+              Confirm your order
+            </h1>
             <p className="text-[#9747FF]">Change and cancel anytime you want</p>
           </section>
 

@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import logo from "../public/assets/images/logo.svg";
 import Button from "./Button";
@@ -11,7 +12,7 @@ const Navbar: React.FC<{
   authPage?: Boolean;
   homepage?: Boolean;
   modalOpen?: Boolean;
-  setModalOpen: Dispatch<SetStateAction<boolean>>;
+  setModalOpen: Dispatch<SetStateAction<Boolean>>;
 }> = ({ authPage, homepage, modalOpen, setModalOpen }) => {
   return (
     <nav

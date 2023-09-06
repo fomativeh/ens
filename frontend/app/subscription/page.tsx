@@ -1,38 +1,20 @@
-"use client"
+"use client";
 import Image from "next/image";
 import Navbar from "../../components/Navbar";
 import pricingImg from "../../public/assets/images/pricing.svg";
-import { PricingPlans } from "../page";
+import { PricingPlans } from "../components/PricingPlan";
 import Link from "next/link";
 import Footer from "../../components/Footer";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
-import {
-  NavModalContext,
-  NavModalContextValue,
-} from "../../context/NavModalContext";
-import { NavModal } from "../page";
-
-export const Questions: React.FC = () => {
-  return (
-    <section className="text-center mt-[40px] mb-[100px]">
-      <h1 className="font-bold">Still have questions?</h1>
-      <p>
-        Have a look at our{" "}
-        <Link href={"/"}>
-          <span className="ml-[3px] text-[#9747FF]">FAQ</span>
-        </Link>
-      </p>
-    </section>
-  );
-};
+import { NavModalContext } from "../../context/NavModalContext";
+import NavModal from "../components/NavModal";
+import { Questions } from "./components/Questions";
 
 const Subsciption: React.FC = () => {
-  const { modalOpen, setModalOpen } = useContext(
-    NavModalContext
-  ) as NavModalContextValue;
+  const { modalOpen, setModalOpen } = useContext(NavModalContext);
   return (
     <main className="overflow-x-hidden flex flex-col min-h-screen justify-start items-center bg-bodyPurple pt-[80px]">
-         <Navbar
+      <Navbar
         homepage={true}
         setModalOpen={setModalOpen}
         modalOpen={modalOpen}

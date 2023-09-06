@@ -8,25 +8,19 @@ import Link from "next/link";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
-import {
-  NavModalContext,
-  NavModalContextValue,
-} from "../../context/NavModalContext";
-import { NavModal } from "../page";
+import { NavModalContext } from "../../context/NavModalContext";
+import NavModal from "../components/NavModal";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { modalOpen, setModalOpen } = useContext(
-    NavModalContext
-  ) as NavModalContextValue;
+  const { modalOpen, setModalOpen } = useContext(NavModalContext);
 
   return (
     <main className="w-full min-h-screen flex flex-col justify-start items-center bg-bodyPurple pb-[100px] pt-[80px]">
       <Navbar setModalOpen={setModalOpen} modalOpen={modalOpen} />
 
       {modalOpen && <NavModal setModalOpen={setModalOpen} />}
-
 
       <section className="w-full h-full flex flex-col justify-start items-center desktopLG:flex-row desktopLG:justify-between desktopLG:items-center desktopLG:pr-[100px] mt-[50px]">
         <figure className="relative w-[90vw] desktopLG:w-[45%] desktopLG:h-[70vh] h-[30vh]">

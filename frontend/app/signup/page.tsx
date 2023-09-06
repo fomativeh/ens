@@ -8,20 +8,15 @@ import Link from "next/link";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
-import {
-  NavModalContext,
-  NavModalContextValue,
-} from "../../context/NavModalContext";
-import { NavModal } from "../page";
+import { NavModalContext } from "../../context/NavModalContext";
+import NavModal from "../components/NavModal";
 
 const Signup: React.FC = () => {
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { modalOpen, setModalOpen } = useContext(
-    NavModalContext
-  ) as NavModalContextValue;
+  const { modalOpen, setModalOpen } = useContext(NavModalContext);
 
   return (
     <main className="w-full min-h-screen flex flex-col justify-start items-center bg-bodyPurple pb-[100px] pt-[80px]">
@@ -30,7 +25,7 @@ const Signup: React.FC = () => {
         setModalOpen={setModalOpen}
         modalOpen={modalOpen}
       />
-           {modalOpen && <NavModal setModalOpen={setModalOpen} />}
+      {modalOpen && <NavModal setModalOpen={setModalOpen} />}
 
       <section className="relative w-full h-full flex flex-col desktopLG:flex-row desktopLG:justify-between items-center desktopLG:pl-[100px] mt-[50px]">
         <figure className="relative w-[45%] h-[40vh] desktopLG:hidden">

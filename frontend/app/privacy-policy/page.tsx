@@ -1,35 +1,11 @@
-"use client"
+"use client";
 import { ReactNode } from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
-import { NavModalContext, NavModalContextValue } from "../../context/NavModalContext";
-import { NavModal } from "../page";
-
-export const SectionWrapper: React.FC<{
-  noContent?: boolean;
-  darkBG?: boolean;
-  children: ReactNode;
-  bottomPad?:Boolean
-}> = ({ noContent, darkBG, bottomPad, children }) => {
-  if (noContent) {
-    return (
-      <section
-        className={`h-[400px] ${darkBG && `bg-[#CD9EDA] opacity-[60%]`} w-full`}
-      />
-    );
-  }
-
-  return (
-    <section
-      className={`py-[30px] px-[35px] desktopLG:px-[120px] ${bottomPad && `pb-[200px]`} flex flex-col justify-start items-start ${
-        darkBG && `bg-[#DAB5E4]`
-      } w-full`}
-    >
-      {children}
-    </section>
-  );
-};
+import { useContext } from "react";
+import { NavModalContext } from "../../context/NavModalContext";
+import NavModal from "../components/NavModal";
+import { SectionWrapper } from "./components/SectionWrapper";
 
 const HeadingWrapper: React.FC<{ text: string }> = ({ text }) => {
   return (
@@ -52,7 +28,7 @@ const TextWrap: React.FC<{ heading: string; text: string }> = ({
 };
 
 const PrivacyPolicy: React.FC = () => {
-  const {modalOpen, setModalOpen } = useContext(NavModalContext) as NavModalContextValue;
+  const { modalOpen, setModalOpen } = useContext(NavModalContext);
 
   return (
     <main className="relative overflow-x-hidden flex flex-col min-h-screen justify-start items-center bg-bodyPurple pt-[80px]">
@@ -61,10 +37,11 @@ const PrivacyPolicy: React.FC = () => {
         setModalOpen={setModalOpen}
         modalOpen={modalOpen}
       />
-          {modalOpen && <NavModal setModalOpen={setModalOpen} />}
+      {modalOpen && <NavModal setModalOpen={setModalOpen} />}
 
-      
-      <h1 className="font-bold mt-[60px] mb-[20px] desktopLG:my-[80px] uppercase desktopLG:max-w-fit max-w-[350px]">Privacy Policy</h1>
+      <h1 className="font-bold mt-[60px] mb-[20px] desktopLG:my-[80px] uppercase desktopLG:max-w-fit max-w-[350px]">
+        Privacy Policy
+      </h1>
       <SectionWrapper>
         <HeadingWrapper text={"Privacy Policy"} />
         <HeadingWrapper text={"Introduction:"} />
@@ -179,7 +156,7 @@ const PrivacyPolicy: React.FC = () => {
           our Site, please reach out to us at info@DomainPlug.com.
         </p>
       </SectionWrapper>
-      <Footer/>
+      <Footer />
     </main>
   );
 };

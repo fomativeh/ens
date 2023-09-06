@@ -21,72 +21,17 @@ import PlanWrapper, { PlanProps } from "./components/PlanWrapper";
 import Accordion from "./components/Accordion";
 import Footer from "../components/Footer";
 import Link from "next/link";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
-import { NavModalContext, NavModalContextValue } from "../context/NavModalContext";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { NavModalContext } from "../context/NavModalContext";
 import { useRouter } from "next/router";
-
-export const NavModal: React.FC<{setModalOpen:Dispatch<SetStateAction<boolean>>}> = ({setModalOpen}) => {
-  return (
-    <section className="absolute top-[80px] left-0 w-full h-screen bg-[#000000c8] flex justify-center items-start z-[999]">
-    <section className="w-full bg-[#fff] flex flex-col justify-start items-start px-[35px]">
-      <ul className="w-full list-none text-[18px]">
-        <li className="font-bold cursor-pointer w-full text-left my-[35px]">
-          <Link href={"/"} onClick={()=>setModalOpen(false)}>
-            Home
-          </Link>
-        </li>
-        <li className="font-bold cursor-pointer w-full text-left my-[35px]">
-          <Link href={"/Appraisal"} onClick={()=>setModalOpen(false)}>
-            Domain Appraisal
-          </Link>
-        </li>
-        <li className="font-bold cursor-pointer w-full text-left my-[35px]">
-          <Link href={"/subscription"} onClick={()=>setModalOpen(false)}>
-            Pricing
-          </Link>
-        </li>
-        <li className="font-bold cursor-pointer w-full text-left my-[35px]">
-          <Link href={"/"} onClick={()=>setModalOpen(false)}>
-            Contact
-          </Link>
-        </li>
-      </ul>
-
-      <Link href={"/signup"} className="w-full" onClick={()=>setModalOpen(false)}>
-        <Button text={"Sign up"} fillWidth={true} />
-      </Link>
-
-      <Link href={"/login"} className="w-full" onClick={()=>setModalOpen(false)}>
-        <button className="w-full py-[15px] px-[20px] rounded-[20px] text-[#6941C6] bg-[#F9F5FF] mt-[20px] mb-[50px]">
-          Login
-        </button>
-      </Link>
-    </section>
-  </section>
-);
-};
-
-
-export const PricingPlans: React.FC = () => {
-  return (
-    <section className="my-[70px] py-[120px] w-full bg-[#fff] flex flex-col justify-start items-center">
-      <h1 className="text-darkPurple font-bold mb-[80px]">OUR PRICING PLANS</h1>
-      <section className="w-[95%] flex justify-evenly flex-wrap items-start">
-        {planData.length > 0 &&
-          planData.map((eachPlan: PlanProps) => {
-            return (
-              <PlanWrapper
-                title={eachPlan.title}
-                description={eachPlan.description}
-                price={eachPlan.price}
-                features={eachPlan.features}
-              />
-            );
-          })}
-      </section>
-    </section>
-  );
-};
+import NavModal from "./components/NavModal";
+import { PricingPlans } from "./components/PricingPlan";
 
 const Dot: React.FC = () => {
   return (
@@ -95,8 +40,7 @@ const Dot: React.FC = () => {
 };
 
 const Home: React.FC = () => {
-  const { modalOpen, setModalOpen } = useContext(NavModalContext) as NavModalContextValue;
-
+  const { modalOpen, setModalOpen } = useContext(NavModalContext);
 
   return (
     <main className="relative overflow-x-hidden flex min-h-screen flex-col items-center justify-between bg-bodyPurple">
@@ -254,9 +198,10 @@ const Home: React.FC = () => {
           </section>
           <section className="w-[55%] flex flex-col justify-start items-center mt-[50px] desktop:mt-[0px]">
             {faqData.length > 0 &&
-              faqData.map((eachQuestion) => {
+              faqData.map((eachQuestion, i) => {
                 return (
                   <Accordion
+                    key={i}
                     title={eachQuestion.title}
                     description={eachQuestion.description}
                   />

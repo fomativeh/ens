@@ -1,23 +1,36 @@
-import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch } from "react";
+"use client";
+import {
+  createContext,
+  Context,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from "react";
 
-export interface NavModalContextValue {
-  modalOpen: boolean;
-  setModalOpen: Dispatch<SetStateAction<boolean>>;
+interface ModalContextProps {
+  modalOpen: Boolean;
+  setModalOpen: Dispatch<SetStateAction<Boolean>>;
 }
 
-export const NavModalContext = createContext<NavModalContextValue | undefined>(undefined);
+const initialState = {
+  modalOpen: false,
+  setModalOpen: (modalOpen: Boolean) => {},
+} as ModalContextProps;
 
-interface NavModalContextProviderProps {
-  children: ReactNode;
-}
+export const NavModalContext = createContext<ModalContextProps>(initialState);
 
-export const NavModalContextProvider: React.FC<NavModalContextProviderProps> = ({ children }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+export const NavModalContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [modalOpen, setModalOpen] = useState<Boolean>(false);
 
-  const contextValue: NavModalContextValue = {
-    modalOpen,
-    setModalOpen,
-  };
-
-  return <NavModalContext.Provider value={contextValue}>{children}</NavModalContext.Provider>;
+  return (
+    <NavModalContext.Provider
+      value={{ modalOpen: modalOpen, setModalOpen: setModalOpen }}
+    >
+      {children}
+    </NavModalContext.Provider>
+  );
 };

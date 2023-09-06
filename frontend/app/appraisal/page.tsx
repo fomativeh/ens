@@ -1,10 +1,14 @@
+"use client"
 import Image from "next/image";
 import Navbar from "../../components/Navbar";
 import ethIcon from "../../public/assets/images/eth.svg";
 import check from "../../public/assets/icons/check.svg";
 import Button from "../../components/Button";
 import similarDomains from "../../utils/similarDomains";
-import arrIcon from "../../public/assets/icons/arr.svg"
+import arrIcon from "../../public/assets/icons/arr.svg";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { NavModalContext } from "../../context/NavModalContext";
+import NavModal from "../components/NavModal";
 
 type SimilarDomainItemProps = {
   name: string;
@@ -32,24 +36,29 @@ const OtherDomainItem: React.FC<{ name: string }> = ({ name }) => {
   return (
     <section className="cursor-pointer w-full rounded-[8px] border-darkPurple border-[1px] flex justify-end items-center my-[10px] py-[8px] px-[5px]">
       <span className="text-darkPink text-[18px]">{name}</span>
-     <section className="ml-[20px]">
-      <Button text={"Appraise"} img={arrIcon}  sm={true}/>
-     </section>
+      <section className="ml-[20px]">
+        <Button text={"Appraise"} img={arrIcon} sm={true} />
+      </section>
     </section>
   );
 };
 
 const Appraisal: React.FC = () => {
+  const { modalOpen, setModalOpen } = useContext(NavModalContext);
   return (
     <main className="w-full min-h-screen overflow-x-hidden flex items-start justify-center bg-bodyPurple">
-      <Navbar />
+      <Navbar setModalOpen={setModalOpen} modalOpen={modalOpen} />
+
+      {modalOpen && <NavModal setModalOpen={setModalOpen} />}
       <section className="w-[88vw] mt-[150px] flex flex-col justify-start items-center desktopLG:flex-row desktopLG:justify-between desktopLG:items-start">
         <section className=" w-[80%] min-w-fit desktopLG:w-[60%] bg-[#fff] rounded-[12px] flex flex-col justify-start items-center p-[35px]">
           <section className="w-full flex flex-col desktopLG:flex-row items-center">
             <h1 className="text-darkPink m-0 mr-[25px] font-bold text-center">
               We have Appraised Your Domain!
             </h1>
-            <span className="text-[#752989] mt-[20px] desktopLG:mt-[0px]">(1 of 2 free tries left)</span>
+            <span className="text-[#752989] mt-[20px] desktopLG:mt-[0px]">
+              (1 of 2 free tries left)
+            </span>
           </section>
 
           <span className="w-full mt-[30px] text-darkPink desktopLG:text-left text-center">
@@ -141,13 +150,9 @@ const Appraisal: React.FC = () => {
         <section className="w-fit min-w-fit desktopLG:w-[35%] desktopLG:mt-0 mt-[100px] bg-[#fff] rounded-[12px] p-[30px] flex flex-col justify-start items-center">
           <h1 className="text-darkPink mb-[35px]">Other Similar Domains</h1>
           {similarDomains.length > 0 &&
-                similarDomains.map((eachDomain) => {
-                  return (
-                    <OtherDomainItem
-                      name={eachDomain.name}
-                    />
-                  );
-                })}
+            similarDomains.map((eachDomain) => {
+              return <OtherDomainItem name={eachDomain.name} />;
+            })}
         </section>
       </section>
     </main>
