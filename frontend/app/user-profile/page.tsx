@@ -173,9 +173,9 @@ const UserProfile: React.FC = () => {
           <section className="h-fit flex flex-row items-center desktopLG:flex-col desktopLG:justify-start w-fit">
             <Button
               text={"Appraise A Domain"}
-              md={window != undefined && window.innerWidth > 960}
-              sm={window != undefined && window.innerWidth < 960 && window.innerWidth > 390}
-              textSm={window && window.innerWidth < 390}
+              md={window !== undefined && window.innerWidth > 960}
+              sm={window !== undefined && window.innerWidth < 960 && window.innerWidth > 390}
+              textSm={window!==undefined && window.innerWidth < 390}
             />
             <button className="ml-[20px] text-[12px] py-[12px] px-[10px] desktopLG:ml-0 tablet:py-[11px] tablet:px-[17px] border-[2px] rounded-[8px] border-[#7F56D9]  desktopLG:mt-[20px]">
               Change Subscription
