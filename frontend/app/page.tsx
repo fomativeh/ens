@@ -57,11 +57,11 @@ const Home: React.FC = () => {
           </h1>
 
           <ul className="ml-[20px] desktop:ml-[0px] text-[#fff] font-bold text-[16px] desktop:text-[20px] flex items-center mb-[50px]">
-            <li className="mr-[50px] flex justify-start items-center">
+            <li className="mr-[25px] tablet:mr-[50px] flex justify-start items-center">
               <Dot />
               <span>Explore</span>
             </li>
-            <li className="mr-[50px] flex justify-start items-center">
+            <li className="mr-[25px] tablet:mr-[50px] flex justify-start items-center">
               <Dot />
               <span>Discover</span>
             </li>

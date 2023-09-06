@@ -13,7 +13,7 @@ type ButtonProps = {
   fillWidth?: boolean;
   md?: boolean;
   homepage?: boolean;
-  textSm?:Boolean
+  textSm?:boolean
 };
 
 const Button: React.FC<ButtonProps> = ({

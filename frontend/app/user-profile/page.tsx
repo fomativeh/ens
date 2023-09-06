@@ -6,7 +6,7 @@ import Button from "../../components/Button";
 import planData from "../../utils/planData";
 import { FeaturesDetails } from "../components/PlanWrapper";
 import checkMark from "../../public/assets/icons/checkmark.svg";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ethIcon from "../../public/assets/images/eth.svg";
 import starIcon from "../../public/assets/icons/star.svg";
 import editIcon from "../../public/assets/icons/edit.svg";
@@ -149,6 +149,35 @@ const Modal: React.FC<{ setModalOpen: Dispatch<SetStateAction<boolean>> }> = ({
 };
 
 const UserProfile: React.FC = () => {
+  const [buttonSize, setButtonSize] = useState<{
+    sm: boolean;
+    md: boolean;
+    textSm: boolean;
+  }>({
+    sm: false,
+    md: false,
+    textSm: false,
+  });
+
+  useEffect(() => {
+    function handleResize() {
+      if (typeof window !== "undefined") {
+        if (window.innerWidth > 960) {
+          setButtonSize({ ...buttonSize, md: true, sm: false, textSm: false });
+        } else if (window.innerWidth < 960 && window.innerWidth > 390) {
+          setButtonSize({ ...buttonSize, md: false, sm: true, textSm: false });
+        } else {
+          setButtonSize({ ...buttonSize, md: false, sm: false, textSm: true });
+        }
+      }
+    }
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [buttonSize]);
+
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <main className="relative h-full w-full min-h-screen bg-bodyPurple flex justify-between items-start">
@@ -173,9 +202,9 @@ const UserProfile: React.FC = () => {
           <section className="h-fit flex flex-row items-center desktopLG:flex-col desktopLG:justify-start w-fit">
             <Button
               text={"Appraise A Domain"}
-              md={window !== undefined && window.innerWidth > 960}
-              sm={window !== undefined && window.innerWidth < 960 && window.innerWidth > 390}
-              textSm={window!==undefined && window.innerWidth < 390}
+              md={buttonSize.md}
+              sm={buttonSize.sm}
+              textSm={buttonSize.textSm}
             />
             <button className="ml-[20px] text-[12px] py-[12px] px-[10px] desktopLG:ml-0 tablet:py-[11px] tablet:px-[17px] border-[2px] rounded-[8px] border-[#7F56D9]  desktopLG:mt-[20px]">
               Change Subscription
