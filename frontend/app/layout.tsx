@@ -11,11 +11,9 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
-   {/* {typeof window !== 'undefined' && ( */}
         <NavModalContextProvider>
           <body>{children}</body>
         </NavModalContextProvider>
-      {/* )} */}
     </html>
   );
 };
