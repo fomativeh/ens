@@ -1,7 +1,6 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { DomainService } from 'src/domain/domain.service';
 import { CreateIptrackDto } from './dto/create-iptrack.dto';
 import { UpdateIptrackDto } from './dto/update-iptrack.dto';
 import { IPTrack } from './entities/iptrack.schema';
@@ -9,40 +8,75 @@ import { IPTrack } from './entities/iptrack.schema';
 @Injectable()
 export class IptrackService {
   constructor(
-    @InjectModel(IPTrack.name) private domainModel: Model<IPTrack>,
-    private domainService: DomainService,
+    @InjectModel(IPTrack.name) private ipTrackModel: Model<IPTrack>,
   ) {}
 
-  async create({
-    createIptrackDto,
-    ip,
-  }: {
-    createIptrackDto: CreateIptrackDto;
-    ip: string;
-  }) {
+  async create({ ip }: { ip: string }) {
     try {
-      // check ip
-      // check limit
-      // domain service appraise name
-      // record trx
+      const ipExists = await this.findOne(ip, true);
+
+      if (!ipExists) {
+        const newIP = await this.ipTrackModel.create({
+          ip,
+          searchCount: 1,
+          lastSearchAt: new Date(),
+          createdAt: new Date(),
+        });
+
+        return newIP;
+      }
+
+      // 3 free appraisals
+      if (ipExists.searchCount >= 3) {
+        throw new HttpException(
+          'Search limit exceeded',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      const updatedCount = await this.ipTrackModel.updateOne(
+        { _id: ipExists.id },
+        { searchCount: ipExists.searchCount + 1 },
+      );
+
+      if (!updatedCount) {
+        throw new HttpException(
+          'Something went wrong',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+
+      return updatedCount;
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }
   }
 
-  findAll() {
-    return `This action returns all iptrack`;
+
+  async findOne(ip: string, internal = false): Promise<IPTrack> {
+    try {
+      if (!ip) {
+        throw new HttpException(
+          'Ip Identifier required',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      const user = await this.ipTrackModel.findOne({ ip });
+
+      if (!user) {
+        if (!internal) {
+          throw new HttpException(
+            'Ip Identifier not found',
+            HttpStatus.BAD_REQUEST,
+          );
+        } else {
+          return null;
+        }
+      }
+
+      return user;
+    } catch (error) {}
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} iptrack`;
-  }
 
-  update(id: number, updateIptrackDto: UpdateIptrackDto) {
-    return `This action updates a #${id} iptrack`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} iptrack`;
-  }
 }

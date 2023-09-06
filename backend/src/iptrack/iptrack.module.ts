@@ -10,5 +10,6 @@ import { MongooseModule } from '@nestjs/mongoose';
   ],
   controllers: [IptrackController],
   providers: [IptrackService],
+  exports: [IptrackService],
 })
 export class IptrackModule {}

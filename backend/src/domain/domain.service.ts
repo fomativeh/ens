@@ -2,17 +2,19 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import axios from 'axios';
 import { Model } from 'mongoose';
+import { IptrackService } from 'src/iptrack/iptrack.service';
+import { UserService } from 'src/user/user.service';
 import { CreateDomainDto } from './dto/create-domain.dto';
 import { UpdateDomainDto } from './dto/update-domain.dto';
 import { Domain } from './entities/domain.schema';
 
 @Injectable()
 export class DomainService {
-  constructor(@InjectModel(Domain.name) private domainModel: Model<Domain>) {}
-
-  create(createDomainDto: CreateDomainDto) {
-    return 'This action adds a new domain';
-  }
+  constructor(
+    @InjectModel(Domain.name) private domainModel: Model<Domain>,
+    private ipService: IptrackService,
+    private userService: UserService,
+  ) {}
 
   async rateDomain(domainId: string, rating: number): Promise<Domain> {
     try {
@@ -31,7 +33,7 @@ export class DomainService {
     }
   }
 
-  async appraiseDomain(domainName: string): Promise<Domain> {
+  async appraiseDomain(domainName: string, user: any = {}): Promise<Domain> {
     try {
       if (!domainName) {
         throw new HttpException(
@@ -39,6 +41,18 @@ export class DomainService {
           HttpStatus.BAD_REQUEST,
         );
       }
+
+      const increaseCount = await this.userService.incrementSearchCount(
+        user._id,
+      );
+
+      if (!increaseCount) {
+        throw new HttpException(
+          'Search Limit exceeded',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
       const appraisalResult = await this.fetchAppraisal({ domainName });
 
       if (!appraisalResult) {
@@ -63,6 +77,25 @@ export class DomainService {
       );
 
       return domain;
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
+  async appraiseDomainFree({
+    ip,
+    domainName,
+  }: {
+    ip: string;
+    domainName: string;
+  }): Promise<Domain> {
+    try {
+      const ipCheck = await this.ipService.create({ ip });
+
+      if (!ipCheck) {
+        throw new HttpException('User limit exceeded', HttpStatus.BAD_REQUEST);
+      }
+      return this.appraiseDomain(domainName);
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }

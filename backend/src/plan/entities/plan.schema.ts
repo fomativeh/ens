@@ -12,7 +12,7 @@ export class Plan extends Document {
   @Prop()
   price: number;
 
-  @Prop()
+  @Prop({ default: new Date()})
   createdAt: Date;
 
   @Prop()
