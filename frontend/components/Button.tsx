@@ -13,6 +13,7 @@ type ButtonProps = {
   fillWidth?: boolean;
   md?: boolean;
   homepage?: boolean;
+  textSm?:Boolean
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -25,6 +26,7 @@ const Button: React.FC<ButtonProps> = ({
   BG,
   fillWidth,
   homepage,
+  textSm
 }) => {
   // Use useState to track window width
   const [windowWidth, setWindowWidth] = useState<number | undefined>(undefined);
@@ -49,19 +51,31 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      className={`${
+      className={`
+      ${
         fillWidth && "w-full"
-      } ${!BG ? "bg-[#7F56D9]" : "bg-darkerPurple"} ${
-        authBtn && "w-full"
-      } text-[#fff] ${
+      }
+      
+      ${!BG ? "bg-[#7F56D9]" : "bg-darkerPurple"}
+      
+      ${authBtn && "w-full"}
+      
+      text-[#fff] 
+      ${textSm && `text-[12px] py-[12px] px-[10px]`}
+      ${
         homepage && windowWidth && windowWidth < 960
           ? "rounded-[20px] px-[10px] py-[8px]"
           : "py-[15px] px-[20px] rounded-[10px]"
-      } h-fit flex justify-center items-center ${
-        sm ? "py-[8px] px-[17px]" : ""
-      } ${md ? "py-[11px] px-[17px]" : ""} ${
-        !md && !sm ? "py-[15px] px-[20px]" : ""
-      } cursor-pointer`}
+      } 
+      h-fit flex justify-center items-center 
+      ${
+        sm && "py-[8px] px-[17px]" 
+      } 
+      ${md && "py-[11px] px-[17px]"} 
+      ${
+        !md && !sm && !textSm && `py-[15px] px-[20px]`
+      } 
+      cursor-pointer`}
     >
       <span
         className={`${img !== undefined && "mr-[15px]"} ${

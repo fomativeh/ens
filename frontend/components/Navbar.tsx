@@ -79,7 +79,7 @@ const Navbar: React.FC<{
 
       <figure
         className="relative w-[30px] h-[30px] desktop:hidden cursor-pointer"
-        onClick={() => setModalOpen(!modalOpen)}
+        onClick={() => {setModalOpen(!modalOpen); window!==undefined && window.scrollTo(0,0)}}
       >
         <Image
           src={modalOpen ? closeIcon : menuIcon}

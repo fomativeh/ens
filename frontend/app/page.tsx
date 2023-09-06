@@ -52,11 +52,11 @@ const Home: React.FC = () => {
       />
       <section className="relative hero mt-[80px] w-full flex flex-col desktop:flex-row justify-start items-center tablet:pl-[70px] desktop:pl-[200px] bg-[#766C79] overflow-hidden">
         <section className="z-[4] w-full flex-col items-center mt-[30px] desktop:mt-[0px]">
-          <h1 className="ml-[40px] mb-[60px] desktop:ml-[0px] text-bodyPurple text-[7vw] desktop:text-[60px] font-bold w-fit max-w-[70%] desktop:max-w-[750px]">
+          <h1 className="ml-[20px] mb-[60px] desktop:ml-[0px] text-bodyPurple text-[7vw] desktop:text-[60px] font-bold w-fit max-w-[70%] desktop:max-w-[750px]">
             The Everything ENS Related
           </h1>
 
-          <ul className="ml-[40px] desktop:ml-[0px] text-[#fff] font-bold text-[16px] desktop:text-[20px] flex items-center mb-[50px]">
+          <ul className="ml-[20px] desktop:ml-[0px] text-[#fff] font-bold text-[16px] desktop:text-[20px] flex items-center mb-[50px]">
             <li className="mr-[50px] flex justify-start items-center">
               <Dot />
               <span>Explore</span>
@@ -71,11 +71,13 @@ const Home: React.FC = () => {
             </li>
           </ul>
 
-          <section className="ml-[40px] desktop:ml-[0px] w-fit h-fit flex justify-start items-center rounded-[10px] py-[2px] pr-[4px] bg-[#fff] border-[#A484E1] border-[4px]">
+          <section className="ml-[20px] desktop:ml-[0px] w-fit h-fit flex justify-start items-center rounded-[20px] desktopLG:rounded-[10px] py-[2px] pr-[2px] desktopLG:pr-[4px] bg-[#fff] border-[#A484E1] border-[4px]">
             <input
               type="text"
               placeholder="enter your .eth domain"
-              className="placeholder:text-darkPink border-none w-[45vw] max-w-[250px] desktop:w-[250px] pl-[12px] h-[38px] desktop:h-[50px] mr-[20px] p-[10px] rounded-[inherit] outline-none"
+              className="placeholder:text-darkPink placeholder:text-[12px] desktopLG:placeholder:text-[16px] border-none w-[45vw] max-w-[250px] desktop:w-[250px] 
+              pl-[9px]
+              desktopLG:pl-[12px] h-[38px] desktop:h-[50px] mr-[20px] p-[10px] rounded-[inherit] outline-none max-tablet:text-[12px]"
             />
             <Button
               text={"Appraise"}
@@ -188,7 +190,7 @@ const Home: React.FC = () => {
       <section className="w-[100vw] my-[90px] flex justify-center items-center">
         <section className="w-[80%] flex flex-col justify-start items-center desktop:flex-row desktop:justify-between desktop:items-start">
           <section>
-            <h1 className="text-[#7B61FF] font-bold">
+            <h1 className="text-[#7B61FF] font-bold desktopLG:text-left text-center">
               Frequently Asked Questions
             </h1>
             <p className="max-w-[280px]">
@@ -196,7 +198,7 @@ const Home: React.FC = () => {
               support@domainplug.com
             </p>
           </section>
-          <section className="w-[55%] flex flex-col justify-start items-center mt-[50px] desktop:mt-[0px]">
+          <section className="w-[95%] desktopLG:w-[55%] flex flex-col justify-start items-center mt-[50px] desktop:mt-[0px]">
             {faqData.length > 0 &&
               faqData.map((eachQuestion, i) => {
                 return (

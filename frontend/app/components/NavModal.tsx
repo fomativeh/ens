@@ -6,7 +6,7 @@ const NavModal: React.FC<{
   setModalOpen: Dispatch<SetStateAction<Boolean>>;
 }> = ({ setModalOpen }) => {
   return (
-    <section className="absolute top-[80px] left-0 w-full h-screen bg-[#000000c8] flex justify-center items-start z-[999]">
+    <section className="absolute top-[80px] left-0 w-full h-screen bg-[#000000c8] flex justify-center items-start z-[999]" onClick={()=>setModalOpen(false)}>
       <section className="w-full bg-[#fff] flex flex-col justify-start items-start px-[35px]">
         <ul className="w-full list-none text-[18px]">
           <li className="font-bold cursor-pointer w-full text-left my-[35px]">

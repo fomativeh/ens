@@ -19,12 +19,12 @@ const Footer: React.FC = () => {
       </section>
 
       <div className="mt-[20px] w-full bg-[#7d99d1] h-[1px]"></div>
-      <section className="w-full flex items-center py-[30px] px-[80px]">
-        <figure className="relative w-[200px] h-[200px] mr-[40px]">
+      <section className="w-full flex justify-between px-[25px] desktopLG:justify-center items-center py-[30px] desktopLG:px-[80px]">
+        <figure className="relative desktopLG:w-[200px] desktopLG:h-[200px] w-[120px] h-[120px] mr-[0px]">
           <Image src={logo} alt={"Footer logo"} fill />
         </figure>
 
-        <span className="text-[#98A2B3]">
+        <span className="text-[#98A2B3] text-[14px] w-[45%] desktopLG:text-[16px] desktopLG:w-fit">
           © 2023 Domain plug UI. All rights reserved.
         </span>
       </section>
