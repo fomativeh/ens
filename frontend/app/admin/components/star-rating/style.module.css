@@ -5,10 +5,6 @@
   width: fit-content;
 }
 
-.star_rating label {
-  display: inline-block;
-}
-
 .star_rating label input[type="radio"] {
   display: none;
 }
