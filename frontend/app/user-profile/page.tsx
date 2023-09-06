@@ -1,5 +1,5 @@
 "use client";
-import Nav from "./components/Nav";
+import DashboardSidebar from "./components/DashboardSidebar";
 import avatar from "../../public/assets/images/avatar.svg";
 import Image from "next/image";
 import Button from "../../components/Button";
@@ -11,6 +11,8 @@ import ethIcon from "../../public/assets/images/eth.svg";
 import starIcon from "../../public/assets/icons/star.svg";
 import editIcon from "../../public/assets/icons/edit.svg";
 import deleteIcon from "../../public/assets/icons/delete.svg";
+import logo from "../../public/assets/images/logo.svg";
+import menuIcon from "../../public/assets/icons/menu.svg";
 
 const ListButton: React.FC<{ text: string; color: string }> = ({
   text,
@@ -47,23 +49,23 @@ const DomainRow: React.FC = () => {
   const [checkedDomain, setCheckedDomain] = useState(false);
   return (
     <section className="w-full bg-[#fff] rounded-[8px] py-[20px] my-[5px] flex">
-      <section className="w-[20%] flex items-center justify-center pl-[15px]">
-        <CheckBox checked={false} setChecked={setCheckedDomain} />
+      <section className="desktopLG:w-[20%] w-[50%] flex items-center justify-center pl-[15px]">
+        <CheckBox checked={checkedDomain} setChecked={setCheckedDomain} />
         <span className="text-darkPink inline-block w-[90%] text-center">
           clean.eth
         </span>
       </section>
-      <section className="w-[15%] flex items-center justify-center">
+      <section className="desktopLG:w-[15%] w-[50%] flex items-center justify-center">
         <span className="text-darkPink mr-[2px]">23.81</span>
         <figure className="relative w-[20px] h-[20px] ml-[5px]">
           <Image src={ethIcon} alt={"Etherum icon"} fill />
         </figure>
       </section>
 
-      <section className="w-[20%] text-center text-darkPink">
+      <section className="hidden desktopLG:block w-[20%] text-center text-darkPink">
         11 June 2023
       </section>
-      <section className="w-[20%] flex justify-center items-center">
+      <section className="hidden desktopLG:flex w-[20%] justify-center items-center">
         <figure className="relative w-[20px] h-[20px]">
           <Image src={starIcon} alt={"Star icon"} fill />
         </figure>
@@ -80,12 +82,12 @@ const DomainRow: React.FC = () => {
           <Image src={starIcon} alt={"Star icon"} fill />
         </figure>
       </section>
-      <section className="w-[12%] flex justify-center items-center">
+      <section className="hidden desktopLG:flex w-[12%] justify-center items-center">
         <figure className="relative w-[20px] h-[20px] cursor-pointer">
           <Image src={editIcon} alt={"Edit icon"} fill />
         </figure>
       </section>
-      <section className="w-[12%] flex justify-center items-center">
+      <section className="w-[12%] hidden desktopLG:flex justify-center items-center">
         <figure className="relative w-[20px] h-[20px] cursor-pointer">
           <Image src={deleteIcon} alt={"Delete icon"} fill />
         </figure>
@@ -114,14 +116,49 @@ const CheckGroup: React.FC<{ label: string; margin?: Boolean }> = ({
   );
 };
 
-const UserProfile: React.FC = () => {
+const MobileNav: React.FC<{
+  modalOpen: Boolean;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+}> = ({ modalOpen, setModalOpen }) => {
   return (
-    <main className="h-full w-full min-h-screen bg-bodyPurple flex justify-between items-start">
-      <Nav />
-      <section className="flex-grow min-h-[100vh] flex flex-col justify-start items-center py-[150px] px-[55px]">
-        <section className="w-full flex justify-between items-center">
-          <section className="flex items-center">
-            <figure className="relative w-[240px] h-[240px] mr-[34px]">
+    <section className="z-[2] w-full flex desktopLG:hidden bg-[#fff] justify-between items-center h-[80px] px-[35px] fixed top-0 left-0">
+      <figure className="w-[100px] h-full relative">
+        <Image src={logo} alt={"Logo image"} fill />
+      </figure>
+
+      {!modalOpen && (
+        <figure
+          className="w-[35px] h-[35px] relative cursor-pointer"
+          onClick={() => setModalOpen(true)}
+        >
+          <Image src={menuIcon} alt={"Menu icon"} fill />
+        </figure>
+      )}
+    </section>
+  );
+};
+
+const Modal: React.FC<{ setModalOpen: Dispatch<SetStateAction<boolean>> }> = ({
+  setModalOpen,
+}) => {
+  return (
+    <section className="desktopLG:hidden px-[20px] bg-[#000000d0] z-[9] absolute top-0 left-0 w-full h-full flex justify-center items-start">
+      <DashboardSidebar onModal={true} setModalOpen={setModalOpen} />
+    </section>
+  );
+};
+
+const UserProfile: React.FC = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  return (
+    <main className="relative h-full w-full min-h-screen bg-bodyPurple flex justify-between items-start">
+      <DashboardSidebar />
+      <MobileNav modalOpen={modalOpen} setModalOpen={setModalOpen} />
+      {modalOpen && <Modal setModalOpen={setModalOpen} />}
+      <section className="w-full flex-grow min-h-[100vh] flex flex-col justify-start items-center py-[150px] px-[25px] desktopLG:px-[55px]">
+        <section className="w-full flex flex-col desktopLG:flex-row desktopLG:justify-between items-center">
+          <section className="flex items-center desktopLG:flex-row flex-col">
+            <figure className="relative w-[240px] h-[240px] desktopLG:mr-[34px]">
               <Image
                 src={avatar}
                 alt={"Profile picture"}
@@ -129,20 +166,23 @@ const UserProfile: React.FC = () => {
                 className="rounded-[50px]"
               />
             </figure>
-            <span className="text-darkPink text-[30px] font-bold">
+            <span className="text-darkPink text-[30px] font-bold mt-[100px] desktopLG:mt-0 desktopLG:mb-0 mb-[30px]">
               Sarah Athens
             </span>
           </section>
-          <section className="flex flex-col justify-start w-fit">
+          <section className="h-fit flex flex-row items-center desktopLG:flex-col desktopLG:justify-start w-fit">
             <Button text={"Appraise A Domain"} md={true} />
-            <button className="py-[11px] px-[17px] border-[2px] rounded-[8px] border-[#7F56D9] mt-[20px]">
+            <button className="ml-[20px] desktopLG:ml-0 py-[11px] px-[17px] border-[2px] rounded-[8px] border-[#7F56D9]  desktopLG:mt-[20px]">
               Change Subscription
             </button>
           </section>
         </section>
 
-        <section className="relative h-fit w-full bg-[#F8EFFA] flex justify-between items-start rounded-[20px] p-[35px] mt-[55px]">
-          <section>
+        <section
+          className="relative h-fit w-full bg-[#F8EFFA] flex flex-col items-center desktopLG:flex-row desktopLG:justify-between
+         desktopLG:items-start rounded-[20px] p-[35px] mt-[55px]"
+        >
+          <section className="flex flex-col items-center desktopLG:items-start">
             <span className="text-[#B253CB] text-[24px] font-bold">
               You are on Plus plan!
             </span>
@@ -152,11 +192,15 @@ const UserProfile: React.FC = () => {
             </section>
           </section>
 
-          <section className="absolute left-[35px] bottom-[35px]">
+          <section className="absolute desktopLG:left-[35px] desktopLG:bottom-[35px] bottom-[50px]">
             <Button text={"Upgrade Plan"} md={true} />
           </section>
 
-          <section className="h-fit flex flex-col justify-evenly items-start w-fit">
+          <section
+            className="h-fit flex flex-col justify-evenly items-center desktopLG:items-start w-full desktopLG:w-fit
+          desktopLG:mb-0
+           desktopLG:mt-0 mt-[40px] mb-[120px]"
+          >
             {planData.length > 0 &&
               planData
                 .filter((eachPlan) => eachPlan.title == "Plus Plan")[0]
@@ -171,9 +215,11 @@ const UserProfile: React.FC = () => {
         </section>
 
         <section className="w-full rounded-[10px] bg-[#F8EFFA] flex flex-col justify-start items-left p-[25px] mt-[120px]">
-          <h1 className="text-[#B253CB] font-bold">Domains You Searched For</h1>
+          <h1 className="text-[#B253CB] font-bold text-[20px] tablet:text-[2vw] desktopLG:text-[30px] desktopLG:text-left text-center">
+            Domains You Searched For
+          </h1>
           <section className="w-full flex flex-col justify-start items-center mt-[25px]">
-            <section className="bg-[#A484E1] flex justify-between items-center w-full px-[30px] py-[15px]">
+            <section className="hidden bg-[#A484E1] desktopLG:flex justify-between items-center w-full px-[30px] py-[15px]">
               <section className="flex justify-start items-center">
                 <span className="text-[#fff] mr-[35px]">Actions</span>
                 <section className="flex items-center justify-start">
@@ -186,7 +232,7 @@ const UserProfile: React.FC = () => {
               <ListButton text={"Delete all"} color={"red"} />
             </section>
             <section className="w-full flex flex-col justify-start items-center bg-[#F0EBFA] pb-[40px]">
-              <section className="text-[#752989] font-bold mt-[40px] mb-[20px] w-full cursor-pointer">
+              <section className="hidden desktopLG:block text-[#752989] font-bold mt-[40px] mb-[20px] w-full cursor-pointer">
                 <span className="inline-block w-[20%] text-center text-[20px]">
                   Domain Name
                 </span>
@@ -208,10 +254,8 @@ const UserProfile: React.FC = () => {
               </section>
 
               <section className="w-[95%] flex flex-col justify-start">
-                {[1,2,3,4,5,6,7,8,9,0].map((e, i)=>{
-                    return(
-                        <DomainRow key={i}/>
-                    )
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((e, i) => {
+                  return <DomainRow key={i} />;
                 })}
               </section>
             </section>

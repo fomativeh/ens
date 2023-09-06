@@ -43,21 +43,21 @@ const Appraisal: React.FC = () => {
   return (
     <main className="w-full min-h-screen overflow-x-hidden flex items-start justify-center bg-bodyPurple">
       <Navbar />
-      <section className="w-[88vw] mt-[150px] flex justify-between items-start">
-        <section className="w-[60%] bg-[#fff] rounded-[12px] flex flex-col justify-start items-center p-[35px]">
-          <section className="w-full flex items-center">
-            <h1 className="text-darkPink m-0 mr-[25px] font-bold">
+      <section className="w-[88vw] mt-[150px] flex flex-col justify-start items-center desktopLG:flex-row desktopLG:justify-between desktopLG:items-start">
+        <section className=" w-[80%] min-w-fit desktopLG:w-[60%] bg-[#fff] rounded-[12px] flex flex-col justify-start items-center p-[35px]">
+          <section className="w-full flex flex-col desktopLG:flex-row items-center">
+            <h1 className="text-darkPink m-0 mr-[25px] font-bold text-center">
               We have Appraised Your Domain!
             </h1>
-            <span className="text-[#752989]">(1 of 2 free tries left)</span>
+            <span className="text-[#752989] mt-[20px] desktopLG:mt-[0px]">(1 of 2 free tries left)</span>
           </section>
 
-          <span className="w-full mt-[20px] text-darkPink">
+          <span className="w-full mt-[30px] text-darkPink desktopLG:text-left text-center">
             Your domain name <b className="font-bold">bloom.eth</b> has an
             estimated value of
           </span>
 
-          <section className="w-full mt-[40px] rounded-[12px] bg-[#A484E1] h-[200px] flex justify-center items-center">
+          <section className="w-full mt-[40px] px-[30px] rounded-[12px] bg-[#A484E1] h-[100px] desktopLG:h-[200px] flex justify-center items-center">
             <span className="text-[#F0EBFA] text-[28px] font-bold mr-[55px]">
               bloom.eth
             </span>
@@ -74,8 +74,8 @@ const Appraisal: React.FC = () => {
             </section>
           </section>
 
-          <section className="w-full flex justify-between items-start">
-            <section className="w-[48%] flex flex-col justify-start items-center">
+          <section className="w-full flex flex-col desktopLG:flex-row desktopLG:justify-between desktopLG:items-start">
+            <section className="w-full desktopLG:w-[48%] flex flex-col justify-start items-center">
               <section className="w-full flex flex-col justify-start items-center bg-[#F0EBFA] p-[20px] rounded-[12px] my-[35px]">
                 <h2 className="text-[#49238F] font-bold">
                   Why is this Domain Valuable?
@@ -121,7 +121,7 @@ const Appraisal: React.FC = () => {
               <Button text={"Buy this domain"} />
             </section>
 
-            <section className="w-[48%] flex flex-col justify-start items-center bg-[#F0EBFA] p-[20px] rounded-[12px] mt-[35px]">
+            <section className="w-full desktopLG:w-[48%] desktopLG:mt-[35px] flex flex-col justify-start items-center bg-[#F0EBFA] p-[20px] rounded-[12px] mt-[100px]">
               <h2 className="text-[#49238F] font-bold mb-[20px]">
                 Most Similar Domains Sold
               </h2>
@@ -138,7 +138,7 @@ const Appraisal: React.FC = () => {
           </section>
         </section>
 
-        <section className="w-[30%] bg-[#fff] rounded-[12px] p-[30px] flex flex-col justify-start items-center">
+        <section className="w-fit min-w-fit desktopLG:w-[35%] desktopLG:mt-0 mt-[100px] bg-[#fff] rounded-[12px] p-[30px] flex flex-col justify-start items-center">
           <h1 className="text-darkPink mb-[35px]">Other Similar Domains</h1>
           {similarDomains.length > 0 &&
                 similarDomains.map((eachDomain) => {

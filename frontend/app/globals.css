@@ -22,10 +22,11 @@ a {
 }
 
 button {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 
 .hero{
   height: calc(100vh - 80px);
 }
+

@@ -12,7 +12,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   img,
 }) => {
   return (
-    <section className="bg-[#F0EBFA] rounded-[20px] py-[45px] px-[30px] w-[35%] flex flex-col justify-start items-center m-[20px]">
+    <section className="bg-[#F0EBFA] rounded-[20px] py-[45px] px-[30px] w-[35%] min-w-[300px] flex flex-col justify-start items-center m-[20px]">
       <section className="w-full flex justify-between items-center mb-[40px]">
         <span className="font-bold text-[25px] max-w-[100px] text-[#43184E]">{title}</span>
         <figure className="relative w-[70px] h-[70px]">

@@ -1,6 +1,10 @@
+"use client"
 import { ReactNode } from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { NavModalContext, NavModalContextValue } from "../../context/NavModalContext";
+import { NavModal } from "../page";
 
 export const SectionWrapper: React.FC<{
   noContent?: boolean;
@@ -18,7 +22,7 @@ export const SectionWrapper: React.FC<{
 
   return (
     <section
-      className={`py-[30px] px-[120px] ${bottomPad && `pb-[200px]`} flex flex-col justify-start items-start ${
+      className={`py-[30px] px-[35px] desktopLG:px-[120px] ${bottomPad && `pb-[200px]`} flex flex-col justify-start items-start ${
         darkBG && `bg-[#DAB5E4]`
       } w-full`}
     >
@@ -48,10 +52,19 @@ const TextWrap: React.FC<{ heading: string; text: string }> = ({
 };
 
 const PrivacyPolicy: React.FC = () => {
+  const {modalOpen, setModalOpen } = useContext(NavModalContext) as NavModalContextValue;
+
   return (
-    <main className="overflow-x-hidden flex flex-col min-h-screen justify-start items-center bg-bodyPurple pt-[80px]">
-      <Navbar />
-      <h1 className="font-bold my-[80px] uppercase">Privacy Policy</h1>
+    <main className="relative overflow-x-hidden flex flex-col min-h-screen justify-start items-center bg-bodyPurple pt-[80px]">
+      <Navbar
+        homepage={true}
+        setModalOpen={setModalOpen}
+        modalOpen={modalOpen}
+      />
+          {modalOpen && <NavModal setModalOpen={setModalOpen} />}
+
+      
+      <h1 className="font-bold mt-[60px] mb-[20px] desktopLG:my-[80px] uppercase desktopLG:max-w-fit max-w-[350px]">Privacy Policy</h1>
       <SectionWrapper>
         <HeadingWrapper text={"Privacy Policy"} />
         <HeadingWrapper text={"Introduction:"} />

@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import Navbar from "../../components/Navbar";
 import loginImg from "../../public/assets/images/login.svg";
 import googleIcon from "../../public/assets/images/google.svg";
@@ -8,23 +7,38 @@ import AuthWrapper from "../../components/AuthWrapper";
 import Link from "next/link";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
+import {
+  NavModalContext,
+  NavModalContextValue,
+} from "../../context/NavModalContext";
+import { NavModal } from "../page";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const { modalOpen, setModalOpen } = useContext(
+    NavModalContext
+  ) as NavModalContextValue;
 
   return (
-    <main className="w-full min-h-screen flex flex-col justify-start items-center bg-bodyPurple pb-[100px]">
-      <Navbar authPage={true} />
-      <section className="w-full h-full flex justify-between items-center pr-[100px] mt-[50px]">
-        <figure className="relative w-[45%] h-[70vh]">
+    <main className="w-full min-h-screen flex flex-col justify-start items-center bg-bodyPurple pb-[100px] pt-[80px]">
+      <Navbar setModalOpen={setModalOpen} modalOpen={modalOpen} />
+
+      {modalOpen && <NavModal setModalOpen={setModalOpen} />}
+
+
+      <section className="w-full h-full flex flex-col justify-start items-center desktopLG:flex-row desktopLG:justify-between desktopLG:items-center desktopLG:pr-[100px] mt-[50px]">
+        <figure className="relative w-[90vw] desktopLG:w-[45%] desktopLG:h-[70vh] h-[30vh]">
           <Image src={loginImg} alt={"Login image"} fill />
         </figure>
 
         <AuthWrapper>
           <section className="w-full flex flex-col justify-start items-center">
-            <h1 className="text-[#B253CB] font-bold">Log in to your account</h1>
-            <span className="mb-[80px]">
+            <h1 className="text-[#B253CB] font-bold text-center">
+              Log in to your account
+            </h1>
+            <span className="mb-[80px] text-center">
               Don't have an account?
               <Link href={"/"} color="red">
                 <span className="text-[#6934CD] ml-[6px]">Sign up</span>

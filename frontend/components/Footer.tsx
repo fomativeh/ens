@@ -6,7 +6,7 @@ import Image from "next/image";
 const Footer: React.FC = () => {
   return (
     <section className="flex flex-col w-full justify-start items-center bg-[#fff]">
-      <section className="w-full flex justify-evenly items-start py-[40px] px-[60px]">
+      <section className="w-full flex justify-evenly flex-wrap items-start py-[40px] px-[60px]">
         {footerData.length > 0 &&
           footerData.map((eachData) => {
             return (
@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
 
       <div className="mt-[20px] w-full bg-[#7d99d1] h-[1px]"></div>
       <section className="w-full flex items-center py-[30px] px-[80px]">
-        <figure className="relative w-[200px] h-[200px] mr-[40%]">
+        <figure className="relative w-[200px] h-[200px] mr-[40px]">
           <Image src={logo} alt={"Footer logo"} fill />
         </figure>
 

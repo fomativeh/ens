@@ -1,12 +1,25 @@
+"use client"
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { NavModalContext, NavModalContextValue } from "../../context/NavModalContext";
+import { NavModal } from "../page";
 
 const TAC = () => {
+  const {modalOpen, setModalOpen } = useContext(NavModalContext) as NavModalContextValue;
+
   return (
     <main className="overflow-x-hidden flex flex-col min-h-screen justify-start items-center bg-bodyPurple pt-[80px]">
-      <Navbar />
-      <h1 className="font-bold my-[80px] uppercase">Terms and Conditions</h1>
-      <section className="w-[50%] font-bold flex flex-col justify-start pb-[120px]">
+       <Navbar
+        homepage={true}
+        setModalOpen={setModalOpen}
+        modalOpen={modalOpen}
+      />
+            {modalOpen && <NavModal setModalOpen={setModalOpen} />}
+
+
+      <h1 className="font-bold mt-[60px] mb-[25px] desktopLGmy-[80px] uppercase desktopLG:max-w-fit max-w-[350px] text-center">Terms and Conditions</h1>
+      <section className="w-[85%] desktopLG:w-[70%] font-bold flex flex-col justify-start pb-[120px]">
         <span className="my-[10px]">
           Please read these Terms and Conditions carefully before using
           DomainPlug’s Services.
@@ -19,7 +32,7 @@ const TAC = () => {
         </span>
         <span className="my-[10px]">
           1.2 Your agreement with DomainPlug shall always comprise, at a
-          minimum, the terms and conditions outlined in this document, unless
+          minimum, the terms and conditions outlined in this document, unless 
           otherwise agreed to in writing with DomainPlug.
         </span>
         <span className="my-[10px]">

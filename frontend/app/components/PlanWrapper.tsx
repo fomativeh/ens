@@ -26,7 +26,7 @@ const PlanWrapper: React.FC<PlanProps> = ({
   features,
 }) => {
   return (
-    <section className="w-[24%] bg-[#A484E1] rounded-[12px] flex flex-col justify-start items-center pb-[30px] pt-[50px]">
+    <section className="w-[40%] mx-[15px] min-w-[330px] tablet:w-[20%] mb-[50px] bg-[#A484E1] rounded-[12px] flex flex-col justify-start items-center pb-[30px] pt-[50px]">
       <span className="text-[#fff] font-bold text-[20px] mb-[20px]">
         {title}
       </span>

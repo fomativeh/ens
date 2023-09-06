@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type FooterLinkProps = {
   title: string;
   links: string[];
@@ -11,7 +13,7 @@ const FooterLinks: React.FC<FooterLinkProps> = ({ title, links }) => {
         links.map((eachLink) => {
           return (
             <span className="text-[#667085] text-[18px] font-semibold my-[10px] cursor-pointer">
-              {eachLink}
+              <Link href={"/"}>{eachLink}</Link>
             </span>
           );
         })}

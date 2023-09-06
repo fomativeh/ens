@@ -8,7 +8,9 @@ const config: Config = {
   ],
   theme: {
     screens: {
-      "desktop": "640px",
+      "tablet": "680px",
+      "desktop": "1000px",
+      "desktopLG":"1140px"
     },
     colors: {
       "bodyPurple": "#EDD8F3",

@@ -1,3 +1,4 @@
+"use client";
 import Navbar from "../components/Navbar";
 import Image from "next/image";
 import heroImg from "../public/assets/images/hero.svg";
@@ -10,8 +11,6 @@ import l from "../public/assets/icons/lightening.svg";
 import d from "../public/assets/icons/drive.svg";
 import i from "../public/assets/icons/insight.svg";
 import a from "../public/assets/icons/approved.svg";
-import j from "../public/assets/icons/check.svg";
-
 import appraise from "../public/assets/images/appraise.svg";
 import planData from "../utils/planData";
 import faqData from "../utils/faqData";
@@ -21,12 +20,58 @@ import AppraiseDetails from "./components/AppraiseDetails";
 import PlanWrapper, { PlanProps } from "./components/PlanWrapper";
 import Accordion from "./components/Accordion";
 import Footer from "../components/Footer";
+import Link from "next/link";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import { NavModalContext, NavModalContextValue } from "../context/NavModalContext";
+import { useRouter } from "next/router";
+
+export const NavModal: React.FC<{setModalOpen:Dispatch<SetStateAction<boolean>>}> = ({setModalOpen}) => {
+  return (
+    <section className="absolute top-[80px] left-0 w-full h-screen bg-[#000000c8] flex justify-center items-start z-[999]">
+    <section className="w-full bg-[#fff] flex flex-col justify-start items-start px-[35px]">
+      <ul className="w-full list-none text-[18px]">
+        <li className="font-bold cursor-pointer w-full text-left my-[35px]">
+          <Link href={"/"} onClick={()=>setModalOpen(false)}>
+            Home
+          </Link>
+        </li>
+        <li className="font-bold cursor-pointer w-full text-left my-[35px]">
+          <Link href={"/Appraisal"} onClick={()=>setModalOpen(false)}>
+            Domain Appraisal
+          </Link>
+        </li>
+        <li className="font-bold cursor-pointer w-full text-left my-[35px]">
+          <Link href={"/subscription"} onClick={()=>setModalOpen(false)}>
+            Pricing
+          </Link>
+        </li>
+        <li className="font-bold cursor-pointer w-full text-left my-[35px]">
+          <Link href={"/"} onClick={()=>setModalOpen(false)}>
+            Contact
+          </Link>
+        </li>
+      </ul>
+
+      <Link href={"/signup"} className="w-full" onClick={()=>setModalOpen(false)}>
+        <Button text={"Sign up"} fillWidth={true} />
+      </Link>
+
+      <Link href={"/login"} className="w-full" onClick={()=>setModalOpen(false)}>
+        <button className="w-full py-[15px] px-[20px] rounded-[20px] text-[#6941C6] bg-[#F9F5FF] mt-[20px] mb-[50px]">
+          Login
+        </button>
+      </Link>
+    </section>
+  </section>
+);
+};
+
 
 export const PricingPlans: React.FC = () => {
   return (
     <section className="my-[70px] py-[120px] w-full bg-[#fff] flex flex-col justify-start items-center">
       <h1 className="text-darkPurple font-bold mb-[80px]">OUR PRICING PLANS</h1>
-      <section className="w-[95%] flex justify-evenly items-start">
+      <section className="w-[95%] flex justify-evenly flex-wrap items-start">
         {planData.length > 0 &&
           planData.map((eachPlan: PlanProps) => {
             return (
@@ -45,21 +90,29 @@ export const PricingPlans: React.FC = () => {
 
 const Dot: React.FC = () => {
   return (
-    <div className="w-[10px] h-[10px] bg-[#fff] rounded-[50px] mr-[15px]"></div>
+    <div className="w-[7px] h-[7px] desktop:w-[10px] desktop:h-[10px] bg-[#fff] rounded-[50px] mr-[8px] desktop:mr-[15px]"></div>
   );
 };
 
 const Home: React.FC = () => {
+  const { modalOpen, setModalOpen } = useContext(NavModalContext) as NavModalContextValue;
+
+
   return (
-    <main className="overflow-x-hidden flex min-h-screen flex-col items-center justify-between bg-bodyPurple">
-      <Navbar homepage={true} />
-      <section className="relative hero mt-[80px] w-full flex justify-start items-center pl-[200px] bg-[#766C79]">
-        <section>
-          <h1 className="text-bodyPurple text-[60px] font-bold max-w-[750px]">
+    <main className="relative overflow-x-hidden flex min-h-screen flex-col items-center justify-between bg-bodyPurple">
+      {modalOpen && <NavModal setModalOpen={setModalOpen} />}
+      <Navbar
+        homepage={true}
+        setModalOpen={setModalOpen}
+        modalOpen={modalOpen}
+      />
+      <section className="relative hero mt-[80px] w-full flex flex-col desktop:flex-row justify-start items-center tablet:pl-[70px] desktop:pl-[200px] bg-[#766C79] overflow-hidden">
+        <section className="z-[4] w-full flex-col items-center mt-[30px] desktop:mt-[0px]">
+          <h1 className="ml-[40px] mb-[60px] desktop:ml-[0px] text-bodyPurple text-[7vw] desktop:text-[60px] font-bold w-fit max-w-[70%] desktop:max-w-[750px]">
             The Everything ENS Related
           </h1>
 
-          <ul className="text-[#fff] font-bold text-[20px] flex items-center mb-[50px]">
+          <ul className="ml-[40px] desktop:ml-[0px] text-[#fff] font-bold text-[16px] desktop:text-[20px] flex items-center mb-[50px]">
             <li className="mr-[50px] flex justify-start items-center">
               <Dot />
               <span>Explore</span>
@@ -74,17 +127,23 @@ const Home: React.FC = () => {
             </li>
           </ul>
 
-          <section className="w-fit h-fit flex justify-start items-center rounded-[10px] py-[2px] pr-[4px] bg-[#fff] border-[#A484E1] border-[4px]">
+          <section className="ml-[40px] desktop:ml-[0px] w-fit h-fit flex justify-start items-center rounded-[10px] py-[2px] pr-[4px] bg-[#fff] border-[#A484E1] border-[4px]">
             <input
               type="text"
               placeholder="enter your .eth domain"
-              className="placeholder:text-darkPink border-none w-[250px] pl-[12px] h-[50px] mr-[20px] p-[10px] rounded-[inherit] outline-none"
+              className="placeholder:text-darkPink border-none w-[45vw] max-w-[250px] desktop:w-[250px] pl-[12px] h-[38px] desktop:h-[50px] mr-[20px] p-[10px] rounded-[inherit] outline-none"
             />
-            <Button text={"Appraise"} img={arrow} />
+            <Button
+              text={"Appraise"}
+              img={arrow}
+              //Make it a small button if the viewport is less than 960px. The line below returns a Boolean
+              // sm={typeof(window) !== undefined && window.innerWidth < 960}
+              homepage={true}
+            />
           </section>
         </section>
-        <section className="absolute right-0 bottom-0 w-[50vw] h-[50vh]">
-          <figure className="h-full w-full relative">
+        <section className="absolute right-0 bottom-0 top-[350px] w-[70vw] mr-[0px] desktop:mr-[-200px] h-[40vh] desktop-w-[50vw] desktop:h-[50vh] z-[1]">
+          <figure className="h-full w-full relative z-[-9]">
             <Image src={heroImg} alt={"Hero illustration"} fill />
           </figure>
         </section>
@@ -148,12 +207,12 @@ const Home: React.FC = () => {
       </section>
 
       <section className="py-[50px] w-[95vw] flex flex-col justify-start items-center bg-lightPurple rounded-[12px] mt-[120px] mb-[150px]">
-        <h1 className="text-darkPink font-bold mb-[60px]">
+        <h1 className="text-darkPink font-bold mb-[60px] max-w-[330px] text-center">
           HOW WE APPRAISE DOMAINS
         </h1>
-        <section className="w-full  flex justify-between items-center pl-[70px] mb-[80px]">
-          <section className="w-[40%] h-fit flex flex-col justify-start items-center relative">
-            <div className="absolute top-0 left-[30px] bg-[#fff] w-[5px] h-[650px]"></div>
+        <section className="w-full  flex justify-between items-center pl-[30px] tablet:pl-[70px] mb-[80px]">
+          <section className="w-full tablet:w-[40%] h-fit flex flex-col justify-start items-center relative">
+            <div className="absolute top-0 left-[10px] tablet:left-[30px] bg-[#fff] w-[5px] h-[650px]"></div>
             <AppraiseDetails
               title={"Machine Work"}
               description={
@@ -176,14 +235,14 @@ const Home: React.FC = () => {
             />
           </section>
 
-          <figure className="relative w-[50%] h-[70vh]">
+          <figure className="relative w-[50%] h-[70vh] hidden desktop:block">
             <Image alt={"Appraise image"} fill src={appraise} />
           </figure>
         </section>
       </section>
       <PricingPlans />
       <section className="w-[100vw] my-[90px] flex justify-center items-center">
-        <section className="w-[80%] flex justify-between items-start">
+        <section className="w-[80%] flex flex-col justify-start items-center desktop:flex-row desktop:justify-between desktop:items-start">
           <section>
             <h1 className="text-[#7B61FF] font-bold">
               Frequently Asked Questions
@@ -193,7 +252,7 @@ const Home: React.FC = () => {
               support@domainplug.com
             </p>
           </section>
-          <section className="w-[55%] flex flex-col justify-start items-center">
+          <section className="w-[55%] flex flex-col justify-start items-center mt-[50px] desktop:mt-[0px]">
             {faqData.length > 0 &&
               faqData.map((eachQuestion) => {
                 return (
