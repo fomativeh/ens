@@ -1,16 +1,14 @@
 "use client";
 import "./globals.css";
-import type { Metadata } from "next";
 import { NavModalContextProvider } from "../context/NavModalContext";
-
-export const metadata: Metadata = {
-  title: "Domain Plug",
-  description: "The Everything ENS Related",
-};
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
+      <head>
+        <title>Domain Plug</title>
+        <meta name="description" content="The Everything ENS Related"/>
+      </head>
         <NavModalContextProvider>
           <body>{children}</body>
         </NavModalContextProvider>
