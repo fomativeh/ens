@@ -23,6 +23,7 @@ import Footer from "../components/Footer";
 import Link from "next/link";
 import {
   Dispatch,
+  FormEvent,
   SetStateAction,
   useContext,
   useEffect,
@@ -32,6 +33,9 @@ import { NavModalContext } from "../context/NavModalContext";
 import { useRouter } from "next/router";
 import NavModal from "./components/NavModal";
 import { PricingPlans } from "./components/PricingPlan";
+import { Toaster, toast } from "react-hot-toast";
+import axios from "axios";
+import { UserContext } from "../context/UserContext";
 
 const Dot: React.FC = () => {
   return (
@@ -41,10 +45,70 @@ const Dot: React.FC = () => {
 
 const Home: React.FC = () => {
   const { modalOpen, setModalOpen } = useContext(NavModalContext);
+  const { userState, setUserState } = useContext(UserContext);
+  const [domain, setDomain] = useState<string>("");
+
+  const handleAppraiseRes = (data: any, loadingToast: any) => {
+    console.log(data);
+    if (data.statusCode == 400) {
+      toast.dismiss(loadingToast);
+      return toast.error(data.message);
+    }
+
+    toast.success(data.message);
+  };
+
+  const callAPI = async () => {
+    let res;
+    if (userState.isLoggedIn) {
+      let token = localStorage.getItem("access_token");
+      if (token !== undefined) {
+        if (token !== null) {
+          token = JSON.parse(token);
+        }
+      }
+      res = await axios.post(
+        "/api/appraisal/paid",
+        { domainName: domain, token },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return res;
+    }
+
+    res = await axios.post("/api/appraisal/trial", domain, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return res;
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (domain.trim() == "") {
+      return toast.error("Please enter a domain name.", { duration: 3000 });
+    }
+    const loadingToast = toast.loading("Appraising domain. Please wait...");
+    try {
+      const domainAppraiseRes = await callAPI();
+      handleAppraiseRes(domainAppraiseRes.data.data, loadingToast);
+    } catch (error) {
+      console.log(error);
+      toast.dismiss(loadingToast);
+      toast.error("An error occured.");
+    }
+  };
 
   return (
     <main className="relative overflow-x-hidden flex min-h-screen flex-col items-center justify-between bg-bodyPurple">
       {modalOpen && <NavModal setModalOpen={setModalOpen} />}
+      <Toaster
+        toastOptions={{ style: { background: "#43184E", color: "#fff" } }}
+      />
       <Navbar
         homepage={true}
         setModalOpen={setModalOpen}
@@ -71,22 +135,26 @@ const Home: React.FC = () => {
             </li>
           </ul>
 
-          <section className="ml-[20px] desktop:ml-[0px] w-fit h-fit flex justify-start items-center rounded-[20px] desktopLG:rounded-[10px] py-[2px] pr-[2px] desktopLG:pr-[4px] bg-[#fff] border-[#A484E1] border-[4px]">
-            <input
-              type="text"
-              placeholder="enter your .eth domain"
-              className="placeholder:text-darkPink placeholder:text-[12px] desktopLG:placeholder:text-[16px] border-none w-[45vw] max-w-[250px] desktop:w-[250px] 
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <section className="ml-[20px] desktop:ml-[0px] w-fit h-fit flex justify-start items-center rounded-[20px] desktopLG:rounded-[10px] py-[2px] pr-[2px] desktopLG:pr-[4px] bg-[#fff] border-[#A484E1] border-[4px]">
+              <input
+                type="text"
+                value={domain}
+                onChange={(e) => setDomain(e.target.value)}
+                placeholder="enter your .eth domain"
+                className="placeholder:text-darkPink placeholder:text-[12px] desktopLG:placeholder:text-[16px] border-none w-[45vw] max-w-[250px] desktop:w-[250px] 
               pl-[9px]
               desktopLG:pl-[12px] h-[38px] desktop:h-[50px] mr-[20px] p-[10px] rounded-[inherit] outline-none max-tablet:text-[12px]"
-            />
-            <Button
-              text={"Appraise"}
-              img={arrow}
-              //Make it a small button if the viewport is less than 960px. The line below returns a Boolean
-              // sm={typeof(window) !== undefined && window.innerWidth < 960}
-              homepage={true}
-            />
-          </section>
+              />
+              <Button
+                text={"Appraise"}
+                img={arrow}
+                //Make it a small button if the viewport is less than 960px. The line below returns a Boolean
+                // sm={typeof(window) !== undefined && window.innerWidth < 960}
+                homepage={true}
+              />
+            </section>
+          </form>
         </section>
         <section className="absolute right-0 bottom-0 top-[350px] w-[70vw] mr-[0px] desktop:mr-[-200px] h-[40vh] desktop-w-[50vw] desktop:h-[50vh] z-[1]">
           <figure className="h-full w-full relative z-[-9]">

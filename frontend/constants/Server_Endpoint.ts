@@ -1,0 +1,1 @@
+export const Server_Endpoint: string = "https://ens-site-backend.onrender.com"

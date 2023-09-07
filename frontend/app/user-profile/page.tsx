@@ -13,6 +13,7 @@ import editIcon from "../../public/assets/icons/edit.svg";
 import deleteIcon from "../../public/assets/icons/delete.svg";
 import logo from "../../public/assets/images/logo.svg";
 import menuIcon from "../../public/assets/icons/menu.svg";
+import Link from "next/link";
 
 const ListButton: React.FC<{ text: string; color: string }> = ({
   text,
@@ -129,7 +130,10 @@ const MobileNav: React.FC<{
       {!modalOpen && (
         <figure
           className="w-[35px] h-[35px] relative cursor-pointer"
-          onClick={() => setModalOpen(true)}
+          onClick={() => {
+            setModalOpen(true);
+            window.scrollTo(0, 0);
+          }}
         >
           <Image src={menuIcon} alt={"Menu icon"} fill />
         </figure>
@@ -176,7 +180,7 @@ const UserProfile: React.FC = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [buttonSize]);
+  }, []);
 
   const [modalOpen, setModalOpen] = useState(false);
   return (
@@ -200,15 +204,19 @@ const UserProfile: React.FC = () => {
             </span>
           </section>
           <section className="h-fit flex flex-row items-center desktopLG:flex-col desktopLG:justify-start w-fit">
-            <Button
-              text={"Appraise A Domain"}
-              md={buttonSize.md}
-              sm={buttonSize.sm}
-              textSm={buttonSize.textSm}
-            />
-            <button className="ml-[20px] text-[12px] py-[12px] px-[10px] desktopLG:ml-0 tablet:py-[11px] tablet:px-[17px] border-[2px] rounded-[8px] border-[#7F56D9]  desktopLG:mt-[20px]">
-              Change Subscription
-            </button>
+            <Link href={"/"}>
+              <Button
+                text={"Appraise A Domain"}
+                md={buttonSize.md}
+                sm={buttonSize.sm}
+                textSm={buttonSize.textSm}
+              />
+            </Link>
+            <Link href={"/subscription"}>
+              <button className="ml-[20px] text-[12px] py-[12px] px-[10px] desktopLG:ml-0 tablet:py-[11px] tablet:px-[17px] border-[2px] rounded-[8px] border-[#7F56D9]  desktopLG:mt-[20px]">
+                Change Subscription
+              </button>
+            </Link>
           </section>
         </section>
 

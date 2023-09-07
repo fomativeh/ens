@@ -5,6 +5,7 @@ type TextInputProps = {
   value: string;
   placeholder?: string;
   setValue: (event: string) => void;
+  type?: string;
 };
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -12,6 +13,7 @@ const TextInput: React.FC<TextInputProps> = ({
   value,
   placeholder,
   setValue,
+  type,
 }) => {
   return (
     <section className="w-full flex flex-col justify-start items-start my-[10px]">
@@ -19,7 +21,7 @@ const TextInput: React.FC<TextInputProps> = ({
         {label}
       </label>
       <input
-        type="text"
+        type={type ? type : "text"}
         placeholder={placeholder}
         id={label}
         value={value}

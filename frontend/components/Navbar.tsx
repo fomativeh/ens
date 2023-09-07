@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import logo from "../public/assets/images/logo.svg";
 import Button from "./Button";
@@ -6,7 +6,8 @@ import menuIcon from "../public/assets/icons/menu.svg";
 import closeIcon from "../public/assets/icons/close.svg";
 
 import Link from "next/link";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 const Navbar: React.FC<{
   authPage?: Boolean;
@@ -14,6 +15,7 @@ const Navbar: React.FC<{
   modalOpen?: Boolean;
   setModalOpen: Dispatch<SetStateAction<Boolean>>;
 }> = ({ authPage, homepage, modalOpen, setModalOpen }) => {
+  const { userState, setUserState } = useContext(UserContext);
   return (
     <nav
       className={`z-[9] w-full h-[80px] ${
@@ -54,32 +56,47 @@ const Navbar: React.FC<{
       </section>
 
       {!authPage && (
-        <section className="hidden desktop:flex justify-start items-center h-full">
-          <ul
-            className={`list-none flex items-center h-[80%] font-[Inter] ${
-              homepage ? `text-[#667085]` : `text-darkerPurple`
-            } font-[500]`}
-          >
-            <Link href={"/login"}>
-              <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
-                Log in
-              </li>
-            </Link>
+        <>
+          {userState.isLoggedIn ? (
+            <span
+              className={`hidden tablet:block ${
+                homepage ? `text-[#667085]` : `text-darkerPurple`
+              } `}
+            >
+              Logged in
+            </span>
+          ) : (
+            <section className="hidden desktop:flex justify-start items-center h-full">
+              <ul
+                className={`list-none flex items-center h-[80%] font-[Inter] ${
+                  homepage ? `text-[#667085]` : `text-darkerPurple`
+                } font-[500]`}
+              >
+                <Link href={"/login"}>
+                  <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
+                    Log in
+                  </li>
+                </Link>
 
-            <Link href={"/signup"}>
-              {homepage ? (
-                <Button text={"Sign up"} />
-              ) : (
-                <Button text={"Sign up"} BG={true} />
-              )}
-            </Link>
-          </ul>
-        </section>
+                <Link href={"/signup"}>
+                  {homepage ? (
+                    <Button text={"Sign up"} />
+                  ) : (
+                    <Button text={"Sign up"} BG={true} />
+                  )}
+                </Link>
+              </ul>
+            </section>
+          )}
+        </>
       )}
 
       <figure
         className="relative w-[30px] h-[30px] desktop:hidden cursor-pointer"
-        onClick={() => {setModalOpen(!modalOpen); window!==undefined && window.scrollTo(0,0)}}
+        onClick={() => {
+          setModalOpen(!modalOpen);
+          window !== undefined && window.scrollTo(0, 0);
+        }}
       >
         <Image
           src={modalOpen ? closeIcon : menuIcon}

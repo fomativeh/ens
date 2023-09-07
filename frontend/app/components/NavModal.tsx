@@ -1,12 +1,17 @@
 import Link from "next/link";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import Button from "../../components/Button";
+import { UserContext } from "../../context/UserContext";
 
 const NavModal: React.FC<{
   setModalOpen: Dispatch<SetStateAction<Boolean>>;
 }> = ({ setModalOpen }) => {
+  const { userState, setUserState } = useContext(UserContext);
   return (
-    <section className="absolute top-[80px] left-0 w-full h-screen bg-[#000000c8] flex justify-center items-start z-[999]" onClick={()=>setModalOpen(false)}>
+    <section
+      className="absolute top-[80px] left-0 w-full h-screen bg-[#000000c8] flex justify-center items-start z-[999]"
+      onClick={() => setModalOpen(false)}
+    >
       <section className="w-full bg-[#fff] flex flex-col justify-start items-start px-[35px]">
         <ul className="w-full list-none text-[18px]">
           <li className="font-bold cursor-pointer w-full text-left my-[35px]">
@@ -31,23 +36,29 @@ const NavModal: React.FC<{
           </li>
         </ul>
 
-        <Link
-          href={"/signup"}
-          className="w-full"
-          onClick={() => setModalOpen(false)}
-        >
-          <Button text={"Sign up"} fillWidth={true} />
-        </Link>
+        {userState.isLoggedIn ? (
+          <span className="mb-[35px] font-bold text-[#6941C6]">Logged in</span>
+        ) : (
+          <>
+            <Link
+              href={"/signup"}
+              className="w-full"
+              onClick={() => setModalOpen(false)}
+            >
+              <Button text={"Sign up"} fillWidth={true} />
+            </Link>
 
-        <Link
-          href={"/login"}
-          className="w-full"
-          onClick={() => setModalOpen(false)}
-        >
-          <button className="w-full py-[15px] px-[20px] rounded-[20px] text-[#6941C6] bg-[#F9F5FF] mt-[20px] mb-[50px]">
-            Login
-          </button>
-        </Link>
+            <Link
+              href={"/login"}
+              className="w-full"
+              onClick={() => setModalOpen(false)}
+            >
+              <button className="w-full py-[15px] px-[20px] rounded-[20px] text-[#6941C6] bg-[#F9F5FF] mt-[20px] mb-[50px]">
+                Login
+              </button>
+            </Link>
+          </>
+        )}
       </section>
     </section>
   );

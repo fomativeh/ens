@@ -7,19 +7,107 @@ import AuthWrapper from "../../components/AuthWrapper";
 import Link from "next/link";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { NavModalContext } from "../../context/NavModalContext";
 import NavModal from "../components/NavModal";
+import { Toaster, toast } from "react-hot-toast";
+import axios from "axios";
+import { UserContext } from "../../context/UserContext";
+import { useRouter } from "next/navigation";
 
 const Signup: React.FC = () => {
+  const router = useRouter();
+  const { userState, setUserState } = useContext(UserContext);
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const { modalOpen, setModalOpen } = useContext(NavModalContext);
 
+  const validateCredentials = () => {
+    if (firstname.trim() == "") {
+      return false;
+    }
+
+    if (lastname.trim() == "") {
+      return false;
+    }
+
+    if (email.trim() == "") {
+      return false;
+    }
+
+    if (password.trim() == "") {
+      return false;
+    }
+
+    return true;
+  };
+
+  const vibrate = () => {
+    if ("vibrate" in navigator) {
+      navigator.vibrate(200);
+    }
+  };
+
+  const handleSignupRes = (data: any, loadingToast: any) => {
+    const statusCode = data.statusCode;
+    if (statusCode == 400) {
+      toast.dismiss(loadingToast);
+      let errorMessage = data.message;
+      //Returns error message from server, checks if it comes in an array or not
+      return toast.error(
+        Array.isArray(errorMessage) ? errorMessage[0] : errorMessage
+      );
+    }
+
+    if (statusCode == 201) {
+      toast.dismiss(loadingToast);
+      //Handle action
+      toast.success(data.message);
+      setUserState({ isLoggedIn: true, userData: data });
+      const { access_token, refresh_token } = data.data;
+      localStorage.setItem("access_token", JSON.stringify(access_token));
+      localStorage.setItem("refresh_token", JSON.stringify(refresh_token));
+      router.push("/user-profile");
+    }
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!validateCredentials()) {
+      vibrate();
+      return toast.error("Please fill all fields.", { duration: 3000 });
+    }
+
+    const credentials = {
+      firstname,
+      lastname,
+      email,
+      password,
+      plan: "delux_plan",
+    };
+    const loadingToast = toast.loading("Signing up. Please wait...");
+
+    try {
+      const signupRes = await axios.post("/api/account/signup", credentials, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      handleSignupRes(signupRes.data.data, loadingToast);
+    } catch (error) {
+      toast.dismiss(loadingToast);
+      toast.error("An error occured.");
+    }
+  };
+
   return (
     <main className="w-full min-h-screen flex flex-col justify-start items-center bg-bodyPurple pb-[100px] pt-[80px]">
+      <Toaster
+        toastOptions={{ style: { background: "#43184E", color: "#fff" } }}
+      />
       <Navbar
         homepage={true}
         setModalOpen={setModalOpen}
@@ -28,15 +116,20 @@ const Signup: React.FC = () => {
       {modalOpen && <NavModal setModalOpen={setModalOpen} />}
 
       <section className="relative w-full h-full flex flex-col desktopLG:flex-row desktopLG:justify-between items-center desktopLG:pl-[100px] mt-[50px]">
-        <figure className="relative w-[45%] h-[40vh] desktopLG:hidden">
+        <figure className="relative w-[70%] h-[50vh] desktopLG:hidden">
           <Image src={signupImg} alt={"Login image"} fill />
         </figure>
         <AuthWrapper>
-          <section className="w-full flex flex-col justify-start items-center">
-            <h1 className="text-[#B253CB] font-bold">Create an account</h1>
-            <span className="mb-[80px]">
+          <form
+            className="w-full flex flex-col justify-start items-center"
+            onSubmit={(e) => handleSubmit(e)}
+          >
+            <h1 className="text-[#B253CB] font-bold text-center max-tablet:text-[25px]">
+              Create an account
+            </h1>
+            <span className="max-tablet:mb-[30px] mb-[80px] max-tablet:text-center max-tablet:max-w-[220px]">
               Already have an account?
-              <Link href={"/"} color="red">
+              <Link href={"/login"} color="red">
                 <span className="text-[#6934CD] ml-[6px]">Sign in</span>
               </Link>
             </span>
@@ -52,8 +145,14 @@ const Signup: React.FC = () => {
                 value={lastname}
                 setValue={setLastname}
               />
-              <TextInput label={"Email"} value={email} setValue={setEmail} />
               <TextInput
+                label={"Email"}
+                type={"Email"}
+                value={email}
+                setValue={setEmail}
+              />
+              <TextInput
+                type={"Password"}
                 label={"Password"}
                 value={password}
                 setValue={setPassword}
@@ -83,9 +182,9 @@ const Signup: React.FC = () => {
                   </Link>
                 </span>
               </section>
-              <Button text={"Sign in"} authBtn={true} boldText={true} />
+              <Button text={"Sign up"} authBtn={true} boldText={true} />
             </section>
-          </section>
+          </form>
         </AuthWrapper>
 
         <figure className="relative w-[45%] desktopLG:h-[70vh] h-[40vh] hidden desktopLG:block">
