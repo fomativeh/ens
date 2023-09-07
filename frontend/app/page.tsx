@@ -49,12 +49,11 @@ const Home: React.FC = () => {
   const [domain, setDomain] = useState<string>("");
 
   const handleAppraiseRes = (data: any, loadingToast: any) => {
-    console.log(data);
     if (data.statusCode == 400) {
       toast.dismiss(loadingToast);
       return toast.error(data.message);
     }
-
+    toast.dismiss(loadingToast);
     toast.success(data.message);
   };
 

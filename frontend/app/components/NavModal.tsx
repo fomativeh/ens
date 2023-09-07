@@ -20,7 +20,7 @@ const NavModal: React.FC<{
             </Link>
           </li>
           <li className="font-bold cursor-pointer w-full text-left my-[35px]">
-            <Link href={"/Appraisal"} onClick={() => setModalOpen(false)}>
+            <Link href={"/appraisal"} onClick={() => setModalOpen(false)}>
               Domain Appraisal
             </Link>
           </li>
