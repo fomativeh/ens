@@ -19,7 +19,7 @@ const Navbar: React.FC<{
 }> = ({ authPage, homepage, modalOpen, setModalOpen }) => {
   const router = useRouter();
   const { userState, setUserState } = useContext(UserContext);
-  const logout = useLogout()
+  const logout = useLogout();
   return (
     <nav
       className={`z-[9] w-full h-[80px] ${
@@ -41,17 +41,21 @@ const Navbar: React.FC<{
               homepage ? `text-[#667085]` : `text-darkerPurple`
             } font-[500]`}
           >
-            <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
-              Home
-            </li>
+            <Link href={"/"}>
+              <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
+                Home
+              </li>
+            </Link>
             <Link href={"/appraisal"}>
               <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
                 Domain appraisal
               </li>
             </Link>
-            <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
-              Pricing
-            </li>
+            <Link href={"/subscription"}>
+              <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
+                Pricing
+              </li>
+            </Link>
             <li className="h-full cursor-pointer flex justify-center items-center">
               Contact
             </li>
