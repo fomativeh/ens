@@ -9,6 +9,7 @@ import arrIcon from "../../public/assets/icons/arr.svg";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { NavModalContext } from "../../context/NavModalContext";
 import NavModal from "../components/NavModal";
+import useAuth from "../../hooks/useAuth";
 
 type SimilarDomainItemProps = {
   name: string;
@@ -45,6 +46,7 @@ const OtherDomainItem: React.FC<{ name: string }> = ({ name }) => {
 
 const Appraisal: React.FC = () => {
   const { modalOpen, setModalOpen } = useContext(NavModalContext);
+  useAuth()
   return (
     <main className="w-full min-h-screen overflow-x-hidden flex items-start justify-center bg-bodyPurple">
       <Navbar setModalOpen={setModalOpen} modalOpen={modalOpen} />

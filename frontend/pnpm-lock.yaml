@@ -20,6 +20,9 @@ dependencies:
   axios:
     specifier: ^1.5.0
     version: 1.5.0
+  fomautils:
+    specifier: ^1.0.2
+    version: 1.0.2
   framer-motion:
     specifier: ^10.16.2
     version: 10.16.4(react-dom@18.2.0)(react@18.2.0)
@@ -431,6 +434,10 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+    dev: false
+
+  /fomautils@1.0.2:
+    resolution: {integrity: sha512-RUKffQdTIvo7+P06BpF/dl7LTxq2OopOGEPBASnyaHsuQix/+K/YITstC3P4sQnxtBVqsnFRJ35hUS9HNOxXag==}
     dev: false
 
   /form-data@4.0.0:

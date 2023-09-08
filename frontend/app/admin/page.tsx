@@ -4,8 +4,10 @@ import styles from "./page.module.css";
 import RecentlyAppraised from "./components/recently-appraised";
 import UserInflow from "./components/user-inflow";
 import Stats from "./components/stats";
+import useAuth from "../../hooks/useAuth";
 
 const Admin: React.FC = () => {
+  useAuth()
   return (
     <>
       <motion.div

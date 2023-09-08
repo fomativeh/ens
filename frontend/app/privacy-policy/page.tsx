@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { NavModalContext } from "../../context/NavModalContext";
 import NavModal from "../components/NavModal";
 import { SectionWrapper } from "./components/SectionWrapper";
+import useAuth from "../../hooks/useAuth";
 
 const HeadingWrapper: React.FC<{ text: string }> = ({ text }) => {
   return (
@@ -28,6 +29,7 @@ const TextWrap: React.FC<{ heading: string; text: string }> = ({
 };
 
 const PrivacyPolicy: React.FC = () => {
+  useAuth()
   const { modalOpen, setModalOpen } = useContext(NavModalContext);
 
   return (

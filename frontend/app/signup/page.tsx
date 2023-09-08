@@ -64,8 +64,8 @@ const Signup: React.FC = () => {
     if (statusCode == 201) {
       toast.dismiss(loadingToast);
       //Handle action
-      toast.success(data.message);
-      setUserState({ isLoggedIn: true, userData: data });
+      toast.success("Registeration successful.");
+      setUserState({ isLoggedIn: true, userData: data.data });
       const { access_token, refresh_token } = data.data;
       localStorage.setItem("access_token", JSON.stringify(access_token));
       localStorage.setItem("refresh_token", JSON.stringify(refresh_token));
@@ -85,7 +85,7 @@ const Signup: React.FC = () => {
       lastname,
       email,
       password,
-      plan: "delux_plan",
+      plan: "basic_plan",
     };
     const loadingToast = toast.loading("Signing up. Please wait...");
 
@@ -95,7 +95,6 @@ const Signup: React.FC = () => {
           "Content-Type": "application/json",
         },
       });
-
       handleSignupRes(signupRes.data.data, loadingToast);
     } catch (error) {
       toast.dismiss(loadingToast);

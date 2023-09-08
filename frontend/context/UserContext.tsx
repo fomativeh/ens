@@ -3,7 +3,7 @@ import { createContext, useState, Dispatch, SetStateAction } from "react";
 
 interface UserContextProps {
   isLoggedIn: Boolean;
-  userData: {};
+  userData: any;
 }
 
 const initialState = {

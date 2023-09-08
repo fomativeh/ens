@@ -3,12 +3,12 @@ import Image from "next/image";
 import Navbar from "../../components/Navbar";
 import pricingImg from "../../public/assets/images/pricing.svg";
 import { PricingPlans } from "../components/PricingPlan";
-import Link from "next/link";
 import Footer from "../../components/Footer";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import {useContext} from "react";
 import { NavModalContext } from "../../context/NavModalContext";
 import NavModal from "../components/NavModal";
 import { Questions } from "./components/Questions";
+// import useAuth from "../../hooks/useAuth";
 
 const Subsciption: React.FC = () => {
   const { modalOpen, setModalOpen } = useContext(NavModalContext);

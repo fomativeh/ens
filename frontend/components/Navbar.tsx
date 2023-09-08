@@ -4,10 +4,12 @@ import logo from "../public/assets/images/logo.svg";
 import Button from "./Button";
 import menuIcon from "../public/assets/icons/menu.svg";
 import closeIcon from "../public/assets/icons/close.svg";
-
 import Link from "next/link";
 import { Dispatch, SetStateAction, useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import { capitalizeFirstLetter } from "fomautils";
+import { useRouter } from "next/navigation";
+import useLogout from "../hooks/useLogout";
 
 const Navbar: React.FC<{
   authPage?: Boolean;
@@ -15,18 +17,20 @@ const Navbar: React.FC<{
   modalOpen?: Boolean;
   setModalOpen: Dispatch<SetStateAction<Boolean>>;
 }> = ({ authPage, homepage, modalOpen, setModalOpen }) => {
+  const router = useRouter();
   const { userState, setUserState } = useContext(UserContext);
+  const logout = useLogout()
   return (
     <nav
       className={`z-[9] w-full h-[80px] ${
         authPage
           ? `bg-none justify-start top-[20px]`
           : `bg-[#fff] top-0 justify-between fixed`
-      } left-0 flex  items-center justify-between py-[0px] desktop:px-[70px] pr-[25px]`}
+      } left-0 flex  items-center justify-between py-[0px] max-tablet:pr-[20px] desktop:px-[70px] pr-[25px]`}
     >
       <section className="h-full flex items-center justify-start">
         <figure
-          className="relative mr-[30px] w-[200px] h-[80%] cursor-pointer"
+          className="relative mr-[30px] w-[200px] h-[80%] cursor-pointer max-tablet:ml-[-35px]"
           onClick={() => window.open("/", "_self")}
         >
           <Image src={logo} alt={"Ens logo"} fill />
@@ -58,13 +62,17 @@ const Navbar: React.FC<{
       {!authPage && (
         <>
           {userState.isLoggedIn ? (
-            <span
-              className={`hidden tablet:block ${
-                homepage ? `text-[#667085]` : `text-darkerPurple`
-              } `}
-            >
-              Logged in
-            </span>
+            <section className="flex items-center">
+              {userState.userData?.firstname && (
+                <span className="w-fit text-center font-bold max-tablet:mr-[15px] max-tablet:text-[13px] tablet:mr-[30px] text-darkPink">
+                  {capitalizeFirstLetter(userState.userData?.firstname)}{" "}
+                  {capitalizeFirstLetter(userState.userData?.lastname)}
+                </span>
+              )}
+              <section className="max-tablet:hidden" onClick={logout}>
+                <Button text={"Logout"} />
+              </section>
+            </section>
           ) : (
             <section className="hidden desktop:flex justify-start items-center h-full">
               <ul

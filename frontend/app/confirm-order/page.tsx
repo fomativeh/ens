@@ -9,8 +9,10 @@ import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { NavModalContext } from "../../context/NavModalContext";
 import NavModal from "../components/NavModal";
 import { Questions } from "../subscription/components/Questions";
+import useAuth from "../../hooks/useAuth";
 
 const ConfirmOrder: React.FC = () => {
+  useAuth()
   const { modalOpen, setModalOpen } = useContext(NavModalContext);
   return (
     <main className="overflow-x-hidden flex flex-col min-h-screen justify-start items-center bg-bodyPurple pt-[80px]">

@@ -1,7 +1,6 @@
 "use client";
 import "./globals.css";
 import { NavModalContextProvider } from "../context/NavModalContext";
-import { Toaster } from "react-hot-toast";
 import { UserContextProvider } from "../context/UserContext";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {

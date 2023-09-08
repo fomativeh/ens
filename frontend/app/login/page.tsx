@@ -56,7 +56,6 @@ const Login: React.FC = () => {
   };
 
   const handleSigninRes = (data: any, loadingToast: any) => {
-    console.log(data);
     const statusCode = data.statusCode;
     if (statusCode == 400) {
       toast.dismiss(loadingToast);
@@ -80,7 +79,7 @@ const Login: React.FC = () => {
       toast.dismiss(loadingToast);
       //Handle action
       toast.success("Welcome.");
-      setUserState({ isLoggedIn: true, userData: data });
+      setUserState({ isLoggedIn: true, userData: data.data });
       const {access_token, refresh_token} = data.data
       localStorage.setItem("access_token", JSON.stringify(access_token));
       localStorage.setItem("refresh_token", JSON.stringify(refresh_token));
@@ -100,7 +99,7 @@ const Login: React.FC = () => {
       lastname,
       email,
       password,
-      plan: "delux_plan",
+      plan: "basic_plan",
     };
     const loadingToast = toast.loading("Signing in. Please wait...");
 
@@ -110,11 +109,10 @@ const Login: React.FC = () => {
           "Content-Type": "application/json",
         },
       });
-
       handleSigninRes(signinRes.data.data, loadingToast);
     } catch (error) {
       toast.dismiss(loadingToast);
-      toast.error("An error occured.");
+      toast.error("An error occured. Please try again.");
     }
   };
 

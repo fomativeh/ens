@@ -3,10 +3,8 @@ import Navbar from "../components/Navbar";
 import Image from "next/image";
 import heroImg from "../public/assets/images/hero.svg";
 import arrow from "../public/assets/icons/arr.svg";
-import af1 from "../public/assets/images/aff-1.svg";
-import af2 from "../public/assets/images/aff-2.svg";
-import af3 from "../public/assets/images/aff-3.svg";
-import af4 from "../public/assets/images/aff-4.svg";
+import aff1 from "../public/assets/images/aff1.svg";
+import aff2 from "../public/assets/images/aff2.svg";
 import l from "../public/assets/icons/lightening.svg";
 import d from "../public/assets/icons/drive.svg";
 import i from "../public/assets/icons/insight.svg";
@@ -30,12 +28,13 @@ import {
   useState,
 } from "react";
 import { NavModalContext } from "../context/NavModalContext";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import NavModal from "./components/NavModal";
 import { PricingPlans } from "./components/PricingPlan";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
+import useAuth from "../hooks/useAuth";
 
 const Dot: React.FC = () => {
   return (
@@ -94,11 +93,11 @@ const Home: React.FC = () => {
     const loadingToast = toast.loading("Appraising domain. Please wait...");
     try {
       const domainAppraiseRes = await callAPI();
+      console.log(domainAppraiseRes);
       handleAppraiseRes(domainAppraiseRes.data.data, loadingToast);
     } catch (error) {
-      console.log(error);
       toast.dismiss(loadingToast);
-      toast.error("An error occured.");
+      toast.error("An error occured. Please try again.");
     }
   };
 
@@ -167,17 +166,11 @@ const Home: React.FC = () => {
           Our Affiliates
         </span>
         <section className="w-full flex justify-evenly items-center mt-[30px]">
-          <figure className="relative w-[18%] h-[100px]">
-            <Image src={af1} fill alt={"Affiliates"} />
+          <figure className="relative max-tablet:w-[30%] tablet:w-[200px] h-[100px]">
+            <Image src={aff1} fill alt={"Affiliates"} />
           </figure>
-          <figure className="relative w-[18%] h-[100px]">
-            <Image src={af2} fill alt={"Affiliates"} />
-          </figure>
-          <figure className="relative w-[18%] h-[100px]">
-            <Image src={af3} fill alt={"Affiliates"} />
-          </figure>
-          <figure className="relative w-[18%] h-[100px]">
-            <Image src={af4} fill alt={"Affiliates"} />
+          <figure className="relative max-tablet:w-[30%] tablet:w-[200px] h-[100px]">
+            <Image src={aff2} fill alt={"Affiliates"} />
           </figure>
         </section>
       </section>

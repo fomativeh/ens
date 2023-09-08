@@ -6,7 +6,13 @@ import Button from "../../components/Button";
 import planData from "../../utils/planData";
 import { FeaturesDetails } from "../components/PlanWrapper";
 import checkMark from "../../public/assets/icons/checkmark.svg";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import ethIcon from "../../public/assets/images/eth.svg";
 import starIcon from "../../public/assets/icons/star.svg";
 import editIcon from "../../public/assets/icons/edit.svg";
@@ -14,6 +20,9 @@ import deleteIcon from "../../public/assets/icons/delete.svg";
 import logo from "../../public/assets/images/logo.svg";
 import menuIcon from "../../public/assets/icons/menu.svg";
 import Link from "next/link";
+import useAuth from "../../hooks/useAuth";
+import { UserContext } from "../../context/UserContext";
+import { capitalizeFirstLetter } from "fomautils";
 
 const ListButton: React.FC<{ text: string; color: string }> = ({
   text,
@@ -122,10 +131,12 @@ const MobileNav: React.FC<{
   setModalOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ modalOpen, setModalOpen }) => {
   return (
-    <section className="z-[2] w-full flex desktopLG:hidden bg-[#fff] justify-between items-center h-[80px] px-[35px] fixed top-0 left-0">
-      <figure className="w-[100px] h-full relative">
-        <Image src={logo} alt={"Logo image"} fill />
-      </figure>
+    <section className="z-[2] w-full flex desktopLG:hidden bg-[#fff] justify-between items-center h-[80px] max-tablet:px-[20px] px-[35px] fixed top-0 left-0">
+      <Link href={"/"} className="block h-full">
+        <figure className="w-[100px] h-full relative max-tablet:ml-[-20px]">
+          <Image src={logo} alt={"Logo image"} fill />
+        </figure>
+      </Link>
 
       {!modalOpen && (
         <figure
@@ -153,6 +164,8 @@ const Modal: React.FC<{ setModalOpen: Dispatch<SetStateAction<boolean>> }> = ({
 };
 
 const UserProfile: React.FC = () => {
+  const { userState, setUserState } = useContext(UserContext);
+  useAuth();
   const [buttonSize, setButtonSize] = useState<{
     sm: boolean;
     md: boolean;
@@ -199,9 +212,12 @@ const UserProfile: React.FC = () => {
                 className="rounded-[50px]"
               />
             </figure>
-            <span className="text-darkPink text-[30px] font-bold mt-[100px] desktopLG:mt-0 desktopLG:mb-0 mb-[30px]">
-              Sarah Athens
-            </span>
+            {userState.userData?.firstname && (
+              <span className="text-darkPink text-[30px] font-bold mt-[100px] desktopLG:mt-0 desktopLG:mb-0 mb-[30px]">
+                {capitalizeFirstLetter(userState.userData.firstname)}{" "}
+                {capitalizeFirstLetter(userState.userData.lastname)}
+              </span>
+            )}
           </section>
           <section className="h-fit flex flex-row items-center desktopLG:flex-col desktopLG:justify-start w-fit">
             <Link href={"/"}>

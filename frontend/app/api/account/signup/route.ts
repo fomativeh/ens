@@ -6,7 +6,7 @@ type formCredentials = {
     lastname: string,
     email: string,
     password: string,
-    plan:string
+    plan?:string
 }
 
 export async function POST(request: Request) {

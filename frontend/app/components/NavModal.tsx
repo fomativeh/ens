@@ -2,11 +2,13 @@ import Link from "next/link";
 import { Dispatch, SetStateAction, useContext } from "react";
 import Button from "../../components/Button";
 import { UserContext } from "../../context/UserContext";
+import useLogout from "../../hooks/useLogout";
 
 const NavModal: React.FC<{
   setModalOpen: Dispatch<SetStateAction<Boolean>>;
 }> = ({ setModalOpen }) => {
   const { userState, setUserState } = useContext(UserContext);
+  const logout = useLogout()
   return (
     <section
       className="absolute top-[80px] left-0 w-full h-screen bg-[#000000c8] flex justify-center items-start z-[999]"
@@ -37,7 +39,9 @@ const NavModal: React.FC<{
         </ul>
 
         {userState.isLoggedIn ? (
-          <span className="mb-[35px] font-bold text-[#6941C6]">Logged in</span>
+          <section onClick={logout} className="w-full mb-[40px]">
+            <Button text={"Logout"} fillWidth={true}/>
+          </section>
         ) : (
           <>
             <Link
