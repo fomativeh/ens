@@ -10,7 +10,7 @@ const Login: React.FC = () => {
       <div className={styles.container}>
         <div className={styles.head}>
           <Image
-            src="/logo.svg"
+            src="/assets/images/logo.svg"
             width={116}
             quality={100}
             priority

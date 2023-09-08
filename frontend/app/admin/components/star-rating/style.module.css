@@ -1,5 +1,6 @@
 .star_rating {
-  padding: 7px 14px 5px;
+  display: flex;
+  padding: 7px 14px;
   background: #752989;
   border-radius: 4px;
   width: fit-content;
