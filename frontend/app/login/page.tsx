@@ -30,14 +30,6 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const { modalOpen, setModalOpen } = useContext(NavModalContext);
   const validateCredentials = () => {
-    if (firstname.trim() == "") {
-      return false;
-    }
-
-    if (lastname.trim() == "") {
-      return false;
-    }
-
     if (email.trim() == "") {
       return false;
     }
@@ -142,16 +134,6 @@ const Login: React.FC = () => {
               </span>
 
               <section className="w-full flex flex-col justify-start">
-                <TextInput
-                  label={"Firstname"}
-                  value={firstname}
-                  setValue={setFirstname}
-                />
-                <TextInput
-                  label={"Lastname"}
-                  value={lastname}
-                  setValue={setLastname}
-                />
                 <TextInput
                   label={"Email"}
                   type="Email"

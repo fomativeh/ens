@@ -34,7 +34,6 @@ import { PricingPlans } from "./components/PricingPlan";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
-import useAuth from "../hooks/useAuth";
 
 const Dot: React.FC = () => {
   return (
@@ -93,7 +92,16 @@ const Home: React.FC = () => {
     const loadingToast = toast.loading("Appraising domain. Please wait...");
     try {
       const domainAppraiseRes = await callAPI();
-      console.log(domainAppraiseRes);
+      if (domainAppraiseRes.data.error?.cause?.message) {
+        toast.dismiss(loadingToast);
+        return toast.error(domainAppraiseRes.data.error?.cause?.message);
+      }
+
+      if(domainAppraiseRes.data.error){
+        toast.dismiss(loadingToast);
+        return toast.error("Network error. Please retry.")
+      }
+
       handleAppraiseRes(domainAppraiseRes.data.data, loadingToast);
     } catch (error) {
       toast.dismiss(loadingToast);

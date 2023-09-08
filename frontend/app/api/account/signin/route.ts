@@ -2,8 +2,6 @@ import { NextResponse } from "next/server"
 import { Server_Endpoint } from "../../../../constants/Server_Endpoint"
 
 type formCredentials = {
-    firstname: string,
-    lastname: string,
     email: string,
     password: string,
 }
