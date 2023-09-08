@@ -23,7 +23,6 @@ import { UpdateDomainDto } from './dto/update-domain.dto';
 export class DomainController {
   constructor(private readonly domainService: DomainService) {}
 
-
   @UseGuards(AtGuard)
   @Post('appraise')
   async getDomainAppraisal(
@@ -54,6 +53,4 @@ export class DomainController {
       // CatchExceptionHandler(error);
     }
   }
-
-
 }
