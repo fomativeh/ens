@@ -27,7 +27,7 @@ export class IptrackService {
       }
 
       // 3 free appraisals
-      if (ipExists.searchCount >= 3) {
+      if (ipExists.searchCount >= 999999) {
         throw new HttpException(
           'Search limit exceeded',
           HttpStatus.BAD_REQUEST,

@@ -78,14 +78,15 @@ export class AuthService {
 
       const tokens = await this.getTokens(user._id.toString(), user.email);
       await this.updateRtHash(user._id.toString(), tokens.refresh_token);
-      return tokens;
+      const { password, ...userWithout } = user.toObject();
+      return { ...userWithout, ...tokens };
     } catch (error) {
       console.log(error.message);
       CatchExceptionHandler(error);
     }
   }
 
-  async signIn(dto: AuthDto): Promise<Tokens> {
+  async signIn(dto: AuthDto): Promise<Tokens | any> {
     try {
       const user = await this.userModel.findOne({ email: dto.email }).exec();
 
@@ -103,10 +104,12 @@ export class AuthService {
           'Invalid Credentials',
           'UNPROCESSABLE_ENTITY',
         );
-
+      const { password, ...userwithout } = user.toObject();
+      console.log({ user });
       const tokens = await this.getTokens(user._id.toString(), user.email);
       await this.updateRtHash(user._id.toString(), tokens.refresh_token);
-      return tokens;
+
+      return { ...userwithout, ...tokens };
     } catch (error) {
       CatchExceptionHandler(error);
     }

@@ -33,7 +33,11 @@ export class DomainService {
     }
   }
 
-  async appraiseDomain(domainName: string, user: any = {}): Promise<Domain> {
+  async appraiseDomain(
+    domainName: string,
+    user: any = {},
+    free = false,
+  ): Promise<Domain> {
     try {
       if (!domainName) {
         throw new HttpException(
@@ -42,15 +46,17 @@ export class DomainService {
         );
       }
 
-      const increaseCount = await this.userService.incrementSearchCount(
-        user._id,
-      );
-
-      if (!increaseCount) {
-        throw new HttpException(
-          'Search Limit exceeded',
-          HttpStatus.BAD_REQUEST,
+      if (!free) {
+        const increaseCount = await this.userService.incrementSearchCount(
+          user._id,
         );
+
+        if (!increaseCount) {
+          throw new HttpException(
+            'Search Limit exceeded',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
       }
 
       const appraisalResult = await this.fetchAppraisal({ domainName });
@@ -90,12 +96,12 @@ export class DomainService {
     domainName: string;
   }): Promise<Domain> {
     try {
-      const ipCheck = await this.ipService.create({ ip });
+      await this.ipService.create({ ip });
 
-      if (!ipCheck) {
-        throw new HttpException('User limit exceeded', HttpStatus.BAD_REQUEST);
-      }
-      return this.appraiseDomain(domainName);
+      // if (!ipCheck) {
+      //   throw new HttpException('User limit exceeded', HttpStatus.BAD_REQUEST);
+      // }
+      return this.appraiseDomain(domainName, {}, true);
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }
@@ -119,10 +125,112 @@ export class DomainService {
 
   private async fetchAppraisal({ domainName }) {
     try {
+      // Initialize retry count and maximum retries
+      let retryCount = 0;
+      const maxRetries = 3;
+      const delay = 1000; // 1 second delay between retries
+
+      // Axios request interceptor
+      axios.interceptors.request.use(
+        (config) => {
+          // Reset retry count for each new request
+          retryCount = 0;
+          return config;
+        },
+        (error) => Promise.reject(error),
+      );
+
+      // Axios response interceptor
+      axios.interceptors.response.use(
+        (response) => {
+          // Check if the response contains an error object
+          if (response.data && response.data.error && retryCount < maxRetries) {
+            // Increment retry count
+            retryCount++;
+
+            // Delay and retry the request with modified uniqueID
+            return new Promise((resolve) => {
+              setTimeout(() => {
+                const config = response.config;
+                const newUniqueID = this.generateUniqueID();
+                config.url = config.url.replace(
+                  /r=0\.\w+/,
+                  `r=0.${newUniqueID}`,
+                );
+                resolve(axios(config));
+              }, delay);
+            });
+          }
+
+          return response;
+        },
+        (error) => {
+          // Check if the error can be retried and if the maximum retry count has been reached
+          if (error.config && retryCount < maxRetries) {
+            // Increment retry count
+            retryCount++;
+
+            // Delay and retry the request with modified uniqueID
+            return new Promise((resolve) => {
+              setTimeout(() => {
+                const config = error.config;
+                const newUniqueID = this.generateUniqueID();
+                config.url = config.url.replace(
+                  /r=0\.\w+/,
+                  `r=0.${newUniqueID}`,
+                );
+                resolve(axios(config));
+              }, delay);
+            });
+          }
+
+          // Reject the promise if the error cannot be retried or maximum retries reached
+          return Promise.reject(error);
+        },
+      );
+
+      // Axios response interceptor
+      axios.interceptors.response.use(
+        (response) => {
+          // Check if the response contains an error object
+          if (response.data && response.data.error && retryCount < maxRetries) {
+            // Increment retry count
+            retryCount++;
+
+            // Delay and retry the request
+            return new Promise((resolve) => {
+              setTimeout(() => {
+                resolve(axios(response.config));
+              }, delay);
+            });
+          }
+
+          return response;
+        },
+        (error) => {
+          // Check if the error can be retried and if the maximum retry count has been reached
+          if (error.config && retryCount < maxRetries) {
+            // Increment retry count
+            retryCount++;
+
+            // Delay and retry the request
+            return new Promise((resolve) => {
+              setTimeout(() => {
+                resolve(axios(error.config));
+              }, delay);
+            });
+          }
+
+          // Reject the promise if the error cannot be retried or maximum retries reached
+          return Promise.reject(error);
+        },
+      );
+
       const uniqueID = this.generateUniqueID();
       const response = await axios.get(
         `https://www.enskit.com/api/domain-appraisal-free?domain=${domainName}&r=0.${uniqueID}`,
       );
+
       return response.data;
     } catch (error) {
       throw new HttpException(error.message, error.status);
