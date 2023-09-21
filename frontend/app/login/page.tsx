@@ -110,7 +110,7 @@ const Login: React.FC = () => {
         <AuthWrapper>
           <form onSubmit={(e) => handleSubmit(e)}>
             <section className="w-full flex flex-col justify-start items-center">
-              <h1 className="text-[#B253CB] font-bold text-center">
+              <h1 className="text-[#B253CB] max-tablet:text-[25px] font-bold text-center">
                 Log in to your account
               </h1>
               <span className="max-tablet:mb-[55px] max-tablet:w-[200px] mb-[80px] text-center">
