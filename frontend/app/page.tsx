@@ -47,12 +47,12 @@ const Home: React.FC = () => {
   const [domain, setDomain] = useState<string>("");
 
   const handleAppraiseRes = (data: any, loadingToast: any) => {
-    if (data.statusCode == 400) {
+    if (data.statusCode == 200) {
       toast.dismiss(loadingToast);
-      return toast.error(data.message);
+      toast.success(data.message)
+      
     }
-    toast.dismiss(loadingToast);
-    toast.success(data.message);
+
   };
 
   const callAPI = async () => {
@@ -92,17 +92,7 @@ const Home: React.FC = () => {
     const loadingToast = toast.loading("Appraising domain. Please wait...");
     try {
       const domainAppraiseRes = await callAPI();
-      if (domainAppraiseRes.data.error?.cause?.message) {
-        toast.dismiss(loadingToast);
-        return toast.error(domainAppraiseRes.data.error?.cause?.message);
-      }
-
-      if(domainAppraiseRes.data.error){
-        toast.dismiss(loadingToast);
-        return toast.error("Network error. Please retry.")
-      }
-
-      handleAppraiseRes(domainAppraiseRes.data.data, loadingToast);
+      handleAppraiseRes(domainAppraiseRes, loadingToast);
     } catch (error) {
       toast.dismiss(loadingToast);
       toast.error("An error occured. Please try again.");
@@ -170,8 +160,8 @@ const Home: React.FC = () => {
       </section>
 
       <section className="my-[50px] w-[95vw] py-[50px] bg-lightPurple rounded-[12px] flex flex-col justify-start items-center">
-        <span className="text-darkPink text-[30px] font-bold">
-          Our Affiliates
+        <span className="text-[#49238f] text-[30px] font-bold">
+          Supported By
         </span>
         <section className="w-full flex justify-evenly items-center mt-[30px]">
           <figure className="relative max-tablet:w-[30%] tablet:w-[200px] h-[100px]">
@@ -255,7 +245,7 @@ const Home: React.FC = () => {
         </section>
       </section>
       <PricingPlans />
-      <section className="w-[100vw] my-[90px] flex justify-center items-center">
+      {/* <section className="w-[100vw] my-[90px] flex justify-center items-center">
         <section className="w-[80%] flex flex-col justify-start items-center desktop:flex-row desktop:justify-between desktop:items-start">
           <section>
             <h1 className="text-[#7B61FF] font-bold desktopLG:text-left text-center">
@@ -279,7 +269,7 @@ const Home: React.FC = () => {
               })}
           </section>
         </section>
-      </section>
+      </section> */}
       <Footer />
     </main>
   );

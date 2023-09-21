@@ -1,66 +1,26 @@
 module.exports = [
   {
     title: "Product",
-    links: [
-      "Overview",
-      "Features",
-      "Solutions",
-      "Tutorials",
-      "Pricing",
-      "Releases",
-    ],
+    links: ["Overview", "Features", "Pricing", "Releases"],
   },
 
   {
     title: "Company",
-    links: ["About us", "Careers", "Press", "News", "Media kit", "Contact"],
+    links: ["About us", "Contact"],
   },
 
   {
     title: "Resources",
-    links: [
-      "Blog",
-      "Newsletter",
-      "Events",
-      "Help centre",
-      "Tutorials",
-      "Support",
-    ],
-  },
-
-  {
-    title: "Use cases",
-    links: [
-      "Startups",
-      "Enterprise",
-      "Government",
-      "SaaS",
-      "Marketplaces",
-      "Ecommerce",
-    ],
+    links: ["Blog", "Newsletter", "Support"],
   },
 
   {
     title: "Social",
-    links: [
-      "Twitter",
-      "LinkedIn",
-      "Facebook",
-      "Github",
-      "AngelList",
-      "Dribbble",
-    ],
+    links: ["X(Twitter)", "LinkedIn", "Telegram", "Discord"],
   },
 
   {
     title: "Legal",
-    links: [
-      "Terms",
-      "Privacy",
-      "Cookies",
-      "Licenses",
-      "Settings",
-      "Contact",
-    ],
+    links: ["Terms", "Privacy", "Cookies", "Licenses"],
   },
 ];

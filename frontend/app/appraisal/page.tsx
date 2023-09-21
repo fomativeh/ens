@@ -52,10 +52,10 @@ const Appraisal: React.FC = () => {
       <Navbar setModalOpen={setModalOpen} modalOpen={modalOpen} />
 
       {modalOpen && <NavModal setModalOpen={setModalOpen} />}
-      <section className="w-[88vw] mt-[150px] flex flex-col justify-start items-center desktopLG:flex-row desktopLG:justify-between desktopLG:items-start">
-        <section className=" w-[80%] min-w-fit desktopLG:w-[60%] bg-[#fff] rounded-[12px] flex flex-col justify-start items-center p-[35px]">
+      <section className="w-[88vw] max-tablet:mt-[110px] mt-[150px] flex flex-col justify-start items-center desktopLG:flex-row desktopLG:justify-between desktopLG:items-start">
+        <section className="max-tablet:w-[100%]  desktopLG:w-[60%] bg-[#fff] rounded-[12px] flex flex-col justify-start items-center max-tablet:px-[15px] p-[35px]">
           <section className="w-full flex flex-col desktopLG:flex-row items-center">
-            <h1 className="text-darkPink m-0 mr-[25px] font-bold text-center">
+            <h1 className="text-darkPink m-0 max-tablet:text-[20px] desktopLG:mr-[25px] font-bold text-center">
               We have Appraised Your Domain!
             </h1>
             <span className="text-[#752989] mt-[20px] desktopLG:mt-[0px]">
@@ -69,23 +69,23 @@ const Appraisal: React.FC = () => {
           </span>
 
           <section className="w-full mt-[40px] px-[30px] rounded-[12px] bg-[#A484E1] h-[100px] desktopLG:h-[200px] flex justify-center items-center">
-            <span className="text-[#F0EBFA] text-[28px] font-bold mr-[55px]">
+            <span className="text-[#F0EBFA] max-tablet:text-[15px] text-[28px] font-bold mr-[55px]">
               bloom.eth
             </span>
 
             <section className="flex items-center">
-              <span className="text-[#F0EBFA] text-[28px] font-bold">
+              <span className="text-[#F0EBFA] max-tablet:text-[15px] text-[28px] font-bold">
                 11.23
               </span>
               <figure className="w-[30px] h-[30px] relative">
                 <Image alt={"Eth icon"} src={ethIcon} fill />
               </figure>
-              <span className="text-[#F0EBFA] text-[28px] font-bold">/</span>
-              <span className="text-[#F0EBFA]">$16211</span>
+              <span className="text-[#F0EBFA] text-[28px] desktopLG:font-bold">/</span>
+              <span className="text-[#F0EBFA] max-tablet:text-[12px]">$16211</span>
             </section>
           </section>
 
-          <section className="w-full flex flex-col desktopLG:flex-row desktopLG:justify-between desktopLG:items-start">
+          <section className="w-full flex flex-col items-center desktopLG:flex-row desktopLG:justify-between desktopLG:items-start">
             <section className="w-full desktopLG:w-[48%] flex flex-col justify-start items-center">
               <section className="w-full flex flex-col justify-start items-center bg-[#F0EBFA] p-[20px] rounded-[12px] my-[35px]">
                 <h2 className="text-[#49238F] font-bold">
@@ -132,7 +132,7 @@ const Appraisal: React.FC = () => {
               <Button text={"Buy this domain"} />
             </section>
 
-            <section className="w-full desktopLG:w-[48%] desktopLG:mt-[35px] flex flex-col justify-start items-center bg-[#F0EBFA] p-[20px] rounded-[12px] mt-[100px]">
+            <section className="w-[90%] desktopLG:w-[48%] desktopLG:mt-[35px] flex flex-col justify-start items-center bg-[#F0EBFA] p-[20px] rounded-[12px] mt-[100px]">
               <h2 className="text-[#49238F] font-bold mb-[20px]">
                 Most Similar Domains Sold
               </h2>
@@ -150,7 +150,7 @@ const Appraisal: React.FC = () => {
         </section>
 
         <section className="w-fit min-w-fit desktopLG:w-[35%] desktopLG:mt-0 mt-[100px] bg-[#fff] rounded-[12px] p-[30px] flex flex-col justify-start items-center">
-          <h1 className="text-darkPink mb-[35px]">Other Similar Domains</h1>
+          <h1 className="text-darkPink mb-[35px] max-tablet:text-[20px] max-tablet:font-bold">Other Similar Domains</h1>
           {similarDomains.length > 0 &&
             similarDomains.map((eachDomain) => {
               return <OtherDomainItem name={eachDomain.name} />;
