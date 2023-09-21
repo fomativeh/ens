@@ -68,10 +68,12 @@ const Navbar: React.FC<{
           {userState.isLoggedIn ? (
             <section className="flex items-center">
               {userState.userData?.firstname && (
+               <Link href={"/user-profile"}>
                 <span className="w-fit text-center font-bold max-tablet:mr-[15px] max-tablet:text-[13px] tablet:mr-[30px] text-darkPink">
                   {capitalizeFirstLetter(userState.userData?.firstname)}{" "}
                   {capitalizeFirstLetter(userState.userData?.lastname)}
                 </span>
+               </Link>
               )}
               <section className="max-tablet:hidden" onClick={logout}>
                 <Button text={"Logout"} />
