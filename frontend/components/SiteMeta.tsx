@@ -4,23 +4,26 @@ const SiteMeta = () => {
   return (
     <>
       <title>Domain Plug</title>
+      {/* <!-- Common Metadata --> */}
       <meta name="description" content="The Everything ENS Related." />
-      {/* Facebook, Whatsapp, Pinterest, LinkedIn SEO */}
+
+      {/* <!-- Facebook, WhatsApp, Pinterest, LinkedIn --> */}
       <meta property="og:title" content="Domain Plug" />
-      <meta property="og:description" content="The Everything ENS Related." />/
+      <meta property="og:description" content="The Everything ENS Related." />
       <meta
         property="og:image"
-        content="../public/assets/images/SEO.jpg"
+        content="https://ens-lite.vercel.app/public/assets/images/SEO.jpg"
       />
       <meta property="og:url" content="https://ens-lite.vercel.app" />
       <meta property="og:type" content="website" />
-      {/* Twitter SEO */}
+
+      {/* <!-- Twitter --> */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Domain Plug" />
       <meta name="twitter:description" content="The Everything ENS Related." />
       <meta
         name="twitter:image"
-        content="../public/assets/images/SEO.jpg"
+        content="https://ens-lite.vercel.app/public/assets/images/SEO.jpg"
       />
     </>
   );
