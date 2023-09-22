@@ -14,7 +14,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <meta property="og:description" content="The Everything ENS Related." />/
         <meta
           property="og:image"
-          content="https://ens-lite.vercel.app/_next/static/media/appraise.6be0e786.svg"
+          content="http://ens-lite.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FSEO.a172ddbd.jpg&w=256&q=75"
         />
         <meta property="og:url" content="https://ens-lite.vercel.app" />
         <meta property="og:type" content="website" />
@@ -25,7 +25,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <meta name="twitter:description" content="The Everything ENS Related." />
         <meta
           name="twitter:image"
-          content="https://ens-lite.vercel.app/_next/static/media/appraise.6be0e786.svg"
+          content="http://ens-lite.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FSEO.a172ddbd.jpg&w=256&q=75"
         />
       </head>
       <NavModalContextProvider>

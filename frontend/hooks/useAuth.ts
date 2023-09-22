@@ -11,6 +11,7 @@ const useAuth = () => {
 
     useEffect(() => {
         const fetchUserData = async (token:any) => {
+            const userID: string = (JSON.parse(localStorage.getItem("userid") as string))
             if (!token) {
                 return;
             }
@@ -19,7 +20,7 @@ const useAuth = () => {
             try {
                 loadingToast = toast.loading("Fetching your details...");
 
-                const fetchUserDataRes = await axios.post("/api/account/userdata", token, {
+                const fetchUserDataRes = await axios.post("/api/account/userdata", userID, {
                     headers: {
                         "Content-Type": "application/json",
                     },
