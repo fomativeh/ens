@@ -34,6 +34,7 @@ import { PricingPlans } from "./components/PricingPlan";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
+import useAuth from "../hooks/useAuth";
 
 const Dot: React.FC = () => {
   return (
@@ -98,6 +99,7 @@ const Home: React.FC = () => {
       toast.error("An error occured. Please try again.");
     }
   };
+  useAuth()
 
   return (
     <main className="relative overflow-x-hidden flex min-h-screen flex-col items-center justify-between bg-bodyPurple">

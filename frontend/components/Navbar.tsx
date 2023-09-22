@@ -29,12 +29,13 @@ const Navbar: React.FC<{
       } left-0 flex  items-center justify-between py-[0px] max-tablet:pr-[20px] desktop:px-[70px] pr-[25px]`}
     >
       <section className="h-full flex items-center justify-start">
+        <Link href={"/"}>
         <figure
           className="relative mr-[30px] w-[200px] h-[80%] cursor-pointer max-tablet:ml-[-35px]"
-          onClick={() => window.open("/", "_self")}
         >
           <Image src={logo} alt={"Ens logo"} fill />
         </figure>
+        </Link>
         {!authPage && (
           <ul
             className={`list-none hidden desktop:flex h-[80%] font-[Inter] ${

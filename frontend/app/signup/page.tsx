@@ -57,7 +57,8 @@ const Signup: React.FC = () => {
       //Handle action
       toast.success("Registeration successful.");
       setUserState({ isLoggedIn: true, userData: data.data });
-      const { access_token, refresh_token } = data.data;
+      const { access_token,_id, refresh_token } = data.data;
+      localStorage.setItem("userid", JSON.stringify(_id));
       localStorage.setItem("access_token", JSON.stringify(access_token));
       localStorage.setItem("refresh_token", JSON.stringify(refresh_token));
       return router.push("/user-profile");

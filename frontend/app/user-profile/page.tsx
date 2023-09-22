@@ -23,6 +23,7 @@ import Link from "next/link";
 import useAuth from "../../hooks/useAuth";
 import { UserContext } from "../../context/UserContext";
 import { capitalizeFirstLetter } from "fomautils";
+import axios from "axios";
 
 const ListButton: React.FC<{ text: string; color: string }> = ({
   text,
@@ -212,10 +213,10 @@ const UserProfile: React.FC = () => {
                 className="rounded-[50px]"
               />
             </figure>
-            {userState.userData?.firstname && (
+            {userState?.userData?.firstname && (
               <span className="text-darkPink text-[30px] font-bold mt-[100px] desktopLG:mt-0 desktopLG:mb-0 mb-[30px]">
-                {capitalizeFirstLetter(userState.userData.firstname)}{" "}
-                {capitalizeFirstLetter(userState.userData.lastname)}
+                {capitalizeFirstLetter(userState?.userData?.firstname)}{" "}
+                {capitalizeFirstLetter(userState?.userData?.lastname)}
               </span>
             )}
           </section>

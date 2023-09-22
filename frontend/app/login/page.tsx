@@ -49,12 +49,13 @@ const Login: React.FC = () => {
 
   const handleSigninRes = (data: any, loadingToast: any) => {
     const statusCode = data.statusCode;
-    if (statusCode==200) {
+    if (statusCode == 200) {
       toast.dismiss(loadingToast);
       //Handle action
       toast.success("Welcome.");
       setUserState({ isLoggedIn: true, userData: data.data });
-      const {access_token, refresh_token} = data.data
+      const { access_token,_id, refresh_token } = data.data;
+      localStorage.setItem("userid", JSON.stringify(_id));
       localStorage.setItem("access_token", JSON.stringify(access_token));
       localStorage.setItem("refresh_token", JSON.stringify(refresh_token));
       return router.push("/user-profile");
@@ -89,7 +90,6 @@ const Login: React.FC = () => {
         },
       });
       handleSigninRes(signinRes.data, loadingToast);
-      console.log(signinRes)
     } catch (error) {
       toast.dismiss(loadingToast);
       toast.error("An error occured. Please try again.");
