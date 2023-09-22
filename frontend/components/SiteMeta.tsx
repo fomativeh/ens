@@ -12,7 +12,7 @@ const SiteMeta = () => {
       <meta property="og:description" content="The Everything ENS Related." />
       <meta
         property="og:image"
-        content="../public/assets/images/SEO.jpg"
+        content="https://m.media-amazon.com/images/I/71fhXpz0t2L._SY466_.jpg"
       />
       <meta property="og:url" content="https://ens-lite.vercel.app" />
       <meta property="og:type" content="website" />
@@ -23,7 +23,7 @@ const SiteMeta = () => {
       <meta name="twitter:description" content="The Everything ENS Related." />
       <meta
         name="twitter:image"
-        content="https://../public/assets/images/SEO.jpg"
+        content="https://m.media-amazon.com/images/I/71fhXpz0t2L._SY466_.jpg"
       />
     </>
   );
