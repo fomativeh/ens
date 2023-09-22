@@ -95,7 +95,7 @@ const Signup: React.FC = () => {
       handleSignupRes(signupRes.data, loadingToast);
     } catch (error) {
       toast.dismiss(loadingToast);
-      toast.error("An error occured.");
+      toast.error("Network error. Please try again");
     }
   };
 

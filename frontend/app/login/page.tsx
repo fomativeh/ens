@@ -92,7 +92,7 @@ const Login: React.FC = () => {
       handleSigninRes(signinRes.data, loadingToast);
     } catch (error) {
       toast.dismiss(loadingToast);
-      toast.error("An error occured. Please try again.");
+      toast.error("Network error. Please try again.");
     }
   };
 
