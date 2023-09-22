@@ -43,17 +43,17 @@ const Navbar: React.FC<{
             } font-[500]`}
           >
             <Link href={"/"}>
-              <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
+              <li className="mr-[35px] h-full cursor-pointer flex justify-center items-center">
                 Home
               </li>
             </Link>
-            <Link href={"/appraisal"}>
+            {/* <Link href={"/appraisal"}>
               <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
                 Domain appraisal
               </li>
-            </Link>
+            </Link> */}
             <Link href={"/subscription"}>
-              <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
+              <li className="mr-[35px] h-full cursor-pointer flex justify-center items-center">
                 Pricing
               </li>
             </Link>

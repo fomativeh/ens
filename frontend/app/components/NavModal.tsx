@@ -21,11 +21,11 @@ const NavModal: React.FC<{
               Home
             </Link>
           </li>
-          <li className="font-bold cursor-pointer w-full text-left my-[35px]">
+          {/* <li className="font-bold cursor-pointer w-full text-left my-[35px]">
             <Link href={"/appraisal"} onClick={() => setModalOpen(false)}>
               Domain Appraisal
             </Link>
-          </li>
+          </li> */}
           <li className="font-bold cursor-pointer w-full text-left my-[35px]">
             <Link href={"/subscription"} onClick={() => setModalOpen(false)}>
               Pricing

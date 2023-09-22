@@ -1,50 +1,55 @@
-"use client"
 import axios from 'axios';
 import { useRouter, usePathname } from 'next/navigation';
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react';
 import { UserContext } from '../context/UserContext';
 import toast from 'react-hot-toast';
 
 const useAuth = () => {
-    const pathname = usePathname()
-    const { setUserState } = useContext(UserContext)
+    const pathname = usePathname();
+    const { setUserState } = useContext(UserContext);
     const router = useRouter();
-    const userID: string = (JSON.parse(localStorage.getItem("userid") as string))
-    const fetchUserData = async (token: string) => {
-        if (token == null || token == undefined) {
-            return
-        }
-        let loadingToast;
-        try {
-            const fetchUserDataRes = await axios.post("/api/account/userdata", userID, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            loadingToast = toast.loading("Fetching your details...");
-            let userData = fetchUserDataRes.data;
-            if (!(userData.email)) {
-                toast.dismiss(loadingToast)
-                return toast.error("An error occcured. Please reload to fetch your details.")
-            }
-
-            setUserState({ isLoggedIn: true, userData: userData })
-            console.log(fetchUserDataRes.data)
-            toast.dismiss(loadingToast)
-        } catch (error) {
-            toast.dismiss(loadingToast);
-            toast.error("An error occcured. Please reload to fetch your details.");
-        }
-    }
 
     useEffect(() => {
-        const accessToken = JSON.parse(localStorage.getItem('access_token') as string)
-        if (!accessToken && pathname !== "/") {
-            return router.push("/login")
+        const fetchUserData = async (token:any) => {
+            if (!token) {
+                return;
+            }
+
+            let loadingToast;
+            try {
+                loadingToast = toast.loading("Fetching your details...");
+
+                const fetchUserDataRes = await axios.post("/api/account/userdata", token, {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                let userData = fetchUserDataRes.data;
+                if (!userData.email) {
+                    toast.dismiss(loadingToast);
+                    return toast.error("An error occurred. Please reload to fetch your details.");
+                }
+
+                setUserState({ isLoggedIn: true, userData: userData });
+                toast.dismiss(loadingToast);
+            } catch (error) {
+                toast.dismiss(loadingToast);
+                toast.error("An error occurred. Please reload to fetch your details.");
+            }
+        };
+
+        if (typeof window !== 'undefined') {
+            const accessToken = JSON.parse(localStorage.getItem('access_token') as string);
+
+            if (!accessToken && pathname !== "/" && pathname !== "/appraisal") {
+                router.push("/login");
+            } else {
+                fetchUserData(accessToken);
+            }
         }
-        fetchUserData(accessToken)
-    }, [])
+    }, [pathname, router, setUserState]);
 
-}
+};
 
-export default useAuth
+export default useAuth;

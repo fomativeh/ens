@@ -46,14 +46,19 @@ const Home: React.FC = () => {
   const { modalOpen, setModalOpen } = useContext(NavModalContext);
   const { userState, setUserState } = useContext(UserContext);
   const [domain, setDomain] = useState<string>("");
+  const router = useRouter()
 
   const handleAppraiseRes = (data: any, loadingToast: any) => {
     if (data.statusCode == 200) {
       toast.dismiss(loadingToast);
-      toast.success(data.message)
-      
+      toast.success("Domain Appraised!");
+      const appraisedData = data.data;
+      localStorage.setItem("Appraise-data", JSON.stringify(appraisedData))
+      return router.push("/appraisal")
     }
 
+    toast.dismiss(loadingToast)
+    toast.error("Network error. Please retry.")
   };
 
   const callAPI = async () => {
@@ -93,10 +98,10 @@ const Home: React.FC = () => {
     const loadingToast = toast.loading("Appraising domain. Please wait...");
     try {
       const domainAppraiseRes = await callAPI();
-      handleAppraiseRes(domainAppraiseRes, loadingToast);
+      handleAppraiseRes(domainAppraiseRes.data, loadingToast);
     } catch (error) {
       toast.dismiss(loadingToast);
-      toast.error("An error occured. Please try again.");
+      toast.error("Network error. Please retry.");
     }
   };
   useAuth()
