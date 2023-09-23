@@ -31,7 +31,6 @@ const Navbar: React.FC<{
       <section className="h-full flex items-center justify-start">
         <figure
           className="relative mr-[30px] w-[200px] h-[80%] cursor-pointer max-tablet:ml-[-35px]"
-          onClick={() => window.open("/", "_self")}
         >
           <Image src={logo} alt={"Ens logo"} fill />
         </figure>
@@ -42,17 +41,17 @@ const Navbar: React.FC<{
             } font-[500]`}
           >
             <Link href={"/"}>
-              <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
+              <li className="mr-[35px] h-full cursor-pointer flex justify-center items-center">
                 Home
               </li>
             </Link>
-            <Link href={"/appraisal"}>
+            {/* <Link href={"/appraisal"}>
               <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
                 Domain appraisal
               </li>
-            </Link>
+            </Link> */}
             <Link href={"/subscription"}>
-              <li className="mr-[25px] h-full cursor-pointer flex justify-center items-center">
+              <li className="mr-[35px] h-full cursor-pointer flex justify-center items-center">
                 Pricing
               </li>
             </Link>
@@ -68,10 +67,12 @@ const Navbar: React.FC<{
           {userState.isLoggedIn ? (
             <section className="flex items-center">
               {userState.userData?.firstname && (
+               <Link href={"/user-profile"}>
                 <span className="w-fit text-center font-bold max-tablet:mr-[15px] max-tablet:text-[13px] tablet:mr-[30px] text-darkPink">
                   {capitalizeFirstLetter(userState.userData?.firstname)}{" "}
                   {capitalizeFirstLetter(userState.userData?.lastname)}
                 </span>
+               </Link>
               )}
               <section className="max-tablet:hidden" onClick={logout}>
                 <Button text={"Logout"} />

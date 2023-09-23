@@ -52,25 +52,22 @@ const Signup: React.FC = () => {
 
   const handleSignupRes = (data: any, loadingToast: any) => {
     const statusCode = data.statusCode;
-    if (statusCode == 400) {
-      toast.dismiss(loadingToast);
-      let errorMessage = data.message;
-      //Returns error message from server, checks if it comes in an array or not
-      return toast.error(
-        Array.isArray(errorMessage) ? errorMessage[0] : errorMessage
-      );
-    }
-
     if (statusCode == 201) {
       toast.dismiss(loadingToast);
       //Handle action
       toast.success("Registeration successful.");
       setUserState({ isLoggedIn: true, userData: data.data });
-      const { access_token, refresh_token } = data.data;
+      const { access_token,_id, refresh_token } = data.data;
+      localStorage.setItem("userid", JSON.stringify(_id));
       localStorage.setItem("access_token", JSON.stringify(access_token));
       localStorage.setItem("refresh_token", JSON.stringify(refresh_token));
-      router.push("/user-profile");
+      return router.push("/user-profile");
     }
+
+    toast.dismiss(loadingToast);
+    let errorMessage = data.message;
+    //Returns error message from server, checks if it comes in an array or not
+    toast.error(errorMessage);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -95,10 +92,10 @@ const Signup: React.FC = () => {
           "Content-Type": "application/json",
         },
       });
-      handleSignupRes(signupRes.data.data, loadingToast);
+      handleSignupRes(signupRes.data, loadingToast);
     } catch (error) {
       toast.dismiss(loadingToast);
-      toast.error("An error occured.");
+      toast.error("Network error. Please try again");
     }
   };
 

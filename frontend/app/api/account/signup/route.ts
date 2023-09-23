@@ -6,7 +6,7 @@ type formCredentials = {
     lastname: string,
     email: string,
     password: string,
-    plan?:string
+    plan?: string
 }
 
 export async function POST(request: Request) {
@@ -16,15 +16,15 @@ export async function POST(request: Request) {
         const res = await fetch(`${Server_Endpoint}/auth/signup`, {
             method: "POST",
             headers: {
-                "Content-Type":"application/json"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(credentials)
         })
 
         const data = await res.json()
         console.log(data)
-        return NextResponse.json({data})
+        return NextResponse.json(data)
     } catch (error) {
-        return NextResponse.json({ error })
+        return NextResponse.json(error)
     }
 }

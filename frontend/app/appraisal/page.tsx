@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import Navbar from "../../components/Navbar";
 import ethIcon from "../../public/assets/images/eth.svg";
@@ -6,10 +6,18 @@ import check from "../../public/assets/icons/check.svg";
 import Button from "../../components/Button";
 import similarDomains from "../../utils/similarDomains";
 import arrIcon from "../../public/assets/icons/arr.svg";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { NavModalContext } from "../../context/NavModalContext";
 import NavModal from "../components/NavModal";
 import useAuth from "../../hooks/useAuth";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 type SimilarDomainItemProps = {
   name: string;
@@ -45,47 +53,66 @@ const OtherDomainItem: React.FC<{ name: string }> = ({ name }) => {
 };
 
 const Appraisal: React.FC = () => {
+  const [appraiseData, setAppraiseData] = useState<any>(null);
+  const router = useRouter();
+  useEffect(() => {
+    const loadedAppraiseData = JSON.parse(
+      localStorage.getItem("Appraise-data") as string
+    );
+    if (
+      loadedAppraiseData == null ||
+      loadedAppraiseData == undefined ||
+      !loadedAppraiseData
+    ) {
+      toast.error("Error fetching appraisal data. Please try again.");
+      setTimeout(() => router.push("/"), 5000);
+    }
+  }, []);
   const { modalOpen, setModalOpen } = useContext(NavModalContext);
-  useAuth()
+  useAuth();
   return (
     <main className="w-full min-h-screen overflow-x-hidden flex items-start justify-center bg-bodyPurple">
       <Navbar setModalOpen={setModalOpen} modalOpen={modalOpen} />
 
       {modalOpen && <NavModal setModalOpen={setModalOpen} />}
-      <section className="w-[88vw] mt-[150px] flex flex-col justify-start items-center desktopLG:flex-row desktopLG:justify-between desktopLG:items-start">
-        <section className=" w-[80%] min-w-fit desktopLG:w-[60%] bg-[#fff] rounded-[12px] flex flex-col justify-start items-center p-[35px]">
+      <section className="w-[88vw] max-tablet:mt-[110px] mt-[150px] flex flex-col justify-start items-center desktopLG:flex-row desktopLG:justify-between desktopLG:items-start">
+        <section className="max-tablet:w-[100%]  desktopLG:w-[60%] bg-[#fff] rounded-[12px] flex flex-col justify-start items-center max-tablet:px-[15px] p-[35px]">
           <section className="w-full flex flex-col desktopLG:flex-row items-center">
-            <h1 className="text-darkPink m-0 mr-[25px] font-bold text-center">
+            <h1 className="text-darkPink m-0 max-tablet:text-[20px] desktopLG:mr-[25px] font-bold text-center">
               We have Appraised Your Domain!
             </h1>
-            <span className="text-[#752989] mt-[20px] desktopLG:mt-[0px]">
+            {/* <span className="text-[#752989] mt-[20px] desktopLG:mt-[0px]">
               (1 of 2 free tries left)
-            </span>
+            </span> */}
           </section>
 
           <span className="w-full mt-[30px] text-darkPink desktopLG:text-left text-center">
-            Your domain name <b className="font-bold">bloom.eth</b> has an
-            estimated value of
+            Your domain name <b className="font-bold">{appraiseData?.name}</b>{" "}
+            has an estimated value of
           </span>
 
           <section className="w-full mt-[40px] px-[30px] rounded-[12px] bg-[#A484E1] h-[100px] desktopLG:h-[200px] flex justify-center items-center">
-            <span className="text-[#F0EBFA] text-[28px] font-bold mr-[55px]">
-              bloom.eth
+            <span className="text-[#F0EBFA] max-tablet:text-[15px] text-[28px] font-bold mr-[55px]">
+              {appraiseData?.name}
             </span>
 
             <section className="flex items-center">
-              <span className="text-[#F0EBFA] text-[28px] font-bold">
-                11.23
+              <span className="text-[#F0EBFA] max-tablet:text-[15px] text-[28px] font-bold">
+                {appraiseData?.appraisedValue}
               </span>
               <figure className="w-[30px] h-[30px] relative">
                 <Image alt={"Eth icon"} src={ethIcon} fill />
               </figure>
-              <span className="text-[#F0EBFA] text-[28px] font-bold">/</span>
-              <span className="text-[#F0EBFA]">$16211</span>
+              <span className="text-[#F0EBFA] text-[28px] desktopLG:font-bold">
+                /
+              </span>
+              <span className="text-[#F0EBFA] max-tablet:text-[12px]">
+                ${appraiseData?.valueUsd}
+              </span>
             </section>
           </section>
 
-          <section className="w-full flex flex-col desktopLG:flex-row desktopLG:justify-between desktopLG:items-start">
+          {/* <section className="w-full flex flex-col items-center desktopLG:flex-row desktopLG:justify-between desktopLG:items-start">
             <section className="w-full desktopLG:w-[48%] flex flex-col justify-start items-center">
               <section className="w-full flex flex-col justify-start items-center bg-[#F0EBFA] p-[20px] rounded-[12px] my-[35px]">
                 <h2 className="text-[#49238F] font-bold">
@@ -132,7 +159,7 @@ const Appraisal: React.FC = () => {
               <Button text={"Buy this domain"} />
             </section>
 
-            <section className="w-full desktopLG:w-[48%] desktopLG:mt-[35px] flex flex-col justify-start items-center bg-[#F0EBFA] p-[20px] rounded-[12px] mt-[100px]">
+            <section className="w-[90%] desktopLG:w-[48%] desktopLG:mt-[35px] flex flex-col justify-start items-center bg-[#F0EBFA] p-[20px] rounded-[12px] mt-[100px]">
               <h2 className="text-[#49238F] font-bold mb-[20px]">
                 Most Similar Domains Sold
               </h2>
@@ -146,16 +173,16 @@ const Appraisal: React.FC = () => {
                   );
                 })}
             </section>
-          </section>
+          </section> */}
         </section>
 
-        <section className="w-fit min-w-fit desktopLG:w-[35%] desktopLG:mt-0 mt-[100px] bg-[#fff] rounded-[12px] p-[30px] flex flex-col justify-start items-center">
-          <h1 className="text-darkPink mb-[35px]">Other Similar Domains</h1>
+        {/* <section className="w-fit min-w-fit desktopLG:w-[35%] desktopLG:mt-0 mt-[100px] bg-[#fff] rounded-[12px] p-[30px] flex flex-col justify-start items-center">
+          <h1 className="text-darkPink mb-[35px] max-tablet:text-[20px] max-tablet:font-bold">Other Similar Domains</h1>
           {similarDomains.length > 0 &&
             similarDomains.map((eachDomain) => {
               return <OtherDomainItem name={eachDomain.name} />;
             })}
-        </section>
+        </section> */}
       </section>
     </main>
   );

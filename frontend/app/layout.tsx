@@ -2,13 +2,13 @@
 import "./globals.css";
 import { NavModalContextProvider } from "../context/NavModalContext";
 import { UserContextProvider } from "../context/UserContext";
+import SiteMeta from "../components/SiteMeta";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <head>
-        <title>Domain Plug</title>
-        <meta name="description" content="The Everything ENS Related" />
+        <SiteMeta />
       </head>
       <NavModalContextProvider>
         <UserContextProvider>

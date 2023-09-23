@@ -49,34 +49,22 @@ const Login: React.FC = () => {
 
   const handleSigninRes = (data: any, loadingToast: any) => {
     const statusCode = data.statusCode;
-    if (statusCode == 400) {
-      toast.dismiss(loadingToast);
-      let errorMessage = data.message;
-      //Returns error message from server, checks if it comes in an array or not
-      return toast.error(
-        Array.isArray(errorMessage) ? errorMessage[0] : errorMessage
-      );
-    }
-
-    if (statusCode == 404) {
-      toast.dismiss(loadingToast);
-      let errorMessage = data.message;
-      //Returns error message from server, checks if it comes in an array or not
-      return toast.error(
-        Array.isArray(errorMessage) ? errorMessage[0] : errorMessage
-      );
-    }
-
     if (statusCode == 200) {
       toast.dismiss(loadingToast);
       //Handle action
       toast.success("Welcome.");
       setUserState({ isLoggedIn: true, userData: data.data });
-      const {access_token, refresh_token} = data.data
+      const { access_token,_id, refresh_token } = data.data;
+      localStorage.setItem("userid", JSON.stringify(_id));
       localStorage.setItem("access_token", JSON.stringify(access_token));
       localStorage.setItem("refresh_token", JSON.stringify(refresh_token));
-      router.push("/user-profile");
+      return router.push("/user-profile");
     }
+
+    toast.dismiss(loadingToast);
+    let errorMessage = data.message;
+    //Returns error message from server, checks if it comes in an array or not
+    return toast.error(errorMessage);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -101,10 +89,10 @@ const Login: React.FC = () => {
           "Content-Type": "application/json",
         },
       });
-      handleSigninRes(signinRes.data.data, loadingToast);
+      handleSigninRes(signinRes.data, loadingToast);
     } catch (error) {
       toast.dismiss(loadingToast);
-      toast.error("An error occured. Please try again.");
+      toast.error("Network error. Please try again.");
     }
   };
 
@@ -123,7 +111,7 @@ const Login: React.FC = () => {
         <AuthWrapper>
           <form onSubmit={(e) => handleSubmit(e)}>
             <section className="w-full flex flex-col justify-start items-center">
-              <h1 className="text-[#B253CB] font-bold text-center">
+              <h1 className="text-[#B253CB] max-tablet:text-[25px] font-bold text-center">
                 Log in to your account
               </h1>
               <span className="max-tablet:mb-[55px] max-tablet:w-[200px] mb-[80px] text-center">
