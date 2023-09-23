@@ -15,7 +15,7 @@ export class SeederService {
     private planService: PlanService,
     private userSerive: UserService,
     private hashingService: HashingService,
-  ) {}
+  ) { }
 
   async seed() {
     try {

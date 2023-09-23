@@ -12,13 +12,13 @@ export class EmailService {
   private mailgunClient: Interfaces.IMailgunClient;
 
   constructor() {
-    this.mailgunClient = mailgun.client({
-      username: 'api',
-      key: '',
-      public_key: '',
-      timeout: 10000,
-      url: '',
-    });
+    // this.mailgunClient = mailgun.client({
+    //   username: 'api',
+    //   key: '',
+    //   public_key: '',
+    //   timeout: 10000,
+    //   url: '', 
+    // }); 
   }
 
   async sendEmail() {
