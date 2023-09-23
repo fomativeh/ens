@@ -29,14 +29,15 @@ const useAuth = () => {
                 let userData = fetchUserDataRes.data;
                 if (!userData.email) {
                     toast.dismiss(loadingToast);
-                    return toast.error("An error occurred. Please reload to fetch your details.");
+                    return toast.error("Please login again to fetch your details.");
+
                 }
 
                 setUserState({ isLoggedIn: true, userData: userData });
                 toast.dismiss(loadingToast);
             } catch (error) {
                 toast.dismiss(loadingToast);
-                toast.error("An error occurred. Please reload to fetch your details.");
+                toast.error("Please login again to fetch your details.");
             }
         };
 
