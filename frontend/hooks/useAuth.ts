@@ -27,13 +27,13 @@ const useAuth = () => {
                 });
 
                 let userData = fetchUserDataRes.data;
-                if (!userData.email) {
+                if (!userData.data.email) {
                     toast.dismiss(loadingToast);
                     return toast.error("Please login again to fetch your details.");
 
                 }
 
-                setUserState({ isLoggedIn: true, userData: userData });
+                setUserState({ isLoggedIn: true, userData: userData.data });
                 toast.dismiss(loadingToast);
             } catch (error) {
                 toast.dismiss(loadingToast);
