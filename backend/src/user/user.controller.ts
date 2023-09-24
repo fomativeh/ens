@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -15,8 +15,17 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    try {
+      const user = await this.userService.findOne(id);
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'user fetched successfully',
+        data: user,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   // @Patch(':id')

@@ -27,7 +27,7 @@ export class DomainController {
   @Post('appraise')
   async getDomainAppraisal(
     @GetUser() User: any,
-    @Body('domainName') domainName: string,
+    @Body('domainName') domainName: string, 
   ) {
     try {
       const domain = await this.domainService.appraiseDomain(domainName, User);

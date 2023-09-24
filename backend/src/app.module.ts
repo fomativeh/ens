@@ -15,6 +15,7 @@ import { AuthModule } from './auth/auth.module';
 import { SeederService } from './services/seeder/seeder.service';
 import { PlanService } from './plan/plan.service';
 import { HashingService } from './services/hashing/hashing.service';
+import { EmailService } from './services/email/email.service';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { HashingService } from './services/hashing/hashing.service';
     SubscriptionService,
     SeederService,
     HashingService,
+    EmailService,
     // { provide: APP_GUARD, useClass: AtGuard },
   ],
 })

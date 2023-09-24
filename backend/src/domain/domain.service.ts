@@ -8,40 +8,102 @@ import { CreateDomainDto } from './dto/create-domain.dto';
 import { UpdateDomainDto } from './dto/update-domain.dto';
 import { Domain } from './entities/domain.schema';
 
+interface AppraisedData {
+  value: string,
+  value_usd: string,
+  domainName: string,
+  lastAppraisedAt: Date
+}
+
 @Injectable()
 export class DomainService {
   constructor(
     @InjectModel(Domain.name) private domainModel: Model<Domain>,
     private ipService: IptrackService,
     private userService: UserService,
-  ) {}
+  ) { }
 
-  async rateDomain(domainId: string, rating: number): Promise<Domain> {
-    try {
-      const domain = await this.domainModel.findById(domainId);
+  // async rateDomain(domainId: string, rating: number): Promise<Domain> {
+  //   try {
+  //     const domain = await this.domainModel.findById(domainId);
 
-      if (!domain) {
-        throw new HttpException('Domain not found', HttpStatus.BAD_REQUEST);
-      }
+  //     if (!domain) {
+  //       throw new HttpException('Domain not found', HttpStatus.BAD_REQUEST);
+  //     }
 
-      domain.rating = rating;
-      domain.updatedAt = new Date();
+  //     domain.rating = rating;
+  //     domain.updatedAt = new Date();
 
-      return domain.save();
-    } catch (error) {
-      throw new HttpException(error.message, error.status);
+  //     return domain.save();
+  //   } catch (error) {
+  //     throw new HttpException(error.message, error.status);
+  //   }
+  // }
+
+  async rateDomain(domain: string) {
+    // Initialize score
+    let score = 0;
+
+    // Define common words and brand names
+    const commonWords = ['finance', 'swap', 'crypto', 'token', 'coin', 'defi'];
+    const brandNames = ['ethereum', 'bitcoin', 'binance'];
+
+    // 1. Check domain length
+    // Shorter domains are generally considered more valuable
+    const lengthScore = Math.max(0, 20 - domain.length);
+    score += lengthScore;
+
+    // 2. Check for numbers
+    // Domains without numbers are generally considered more valuable
+    const numberScore = domain.match(/\d+/g) ? -10 : 10;
+    score += numberScore;
+
+    // 3. Check for common words
+    // Domains containing common words related to the crypto industry are considered more valuable
+    commonWords.forEach((word) => {
+      if (domain.includes(word)) score += 5;
+    });
+
+    // 4. Check for brand names
+    // Domains containing brand names might be considered less valuable due to legal issues
+    brandNames.forEach((brand) => {
+      if (domain.includes(brand)) score -= 20;
+    });
+
+    const valueUsd = await this.getEthPrice() * this.scoreToEthValue(score);
+
+    const appraisal = {
+      domainName: domain,
+      value: this.scoreToEthValue(score).toString(),
+      value_usd: valueUsd.toFixed(2).toString(),
+      lastAppraisedAt: new Date()
     }
+
+    return appraisal;
+  }
+
+  scoreToEthValue(score: number) {
+    const conversionFactor = 0.01; // Example conversion factor, 1 score point equals 0.01 ETH
+    return Math.max(0, score * conversionFactor); // Ensure that the value is not negative
   }
 
   async appraiseDomain(
     domainName: string,
     user: any = {},
     free = false,
-  ): Promise<Domain> {
+  ) {
     try {
       if (!domainName) {
         throw new HttpException(
           'Domain name cannot be empty',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      // Check if domain is valid
+      if (typeof domainName !== 'string' || !domainName.endsWith('.eth')) {
+        throw new HttpException(
+          'Invalid domain name',
           HttpStatus.BAD_REQUEST,
         );
       }
@@ -59,13 +121,17 @@ export class DomainService {
         }
       }
 
-      const appraisalResult = await this.fetchAppraisal({ domainName });
+      let appraisalResult = await this.fetchAppraisal({ domainName });
 
       if (!appraisalResult) {
         throw new HttpException(
           'Something went wrong trying to appraise domain',
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
+      }
+
+      if (!appraisalResult.domainName) {
+        appraisalResult = await this.rateDomain(domainName);
       }
 
       const update = {
@@ -94,7 +160,7 @@ export class DomainService {
   }: {
     ip: string;
     domainName: string;
-  }): Promise<Domain> {
+  }) {
     try {
       await this.ipService.create({ ip });
 
@@ -129,9 +195,14 @@ export class DomainService {
       let retryCount = 0;
       const maxRetries = 3;
       const delay = 1000; // 1 second delay between retries
+      let data: AppraisedData;
+
+      const axiosClient = axios.create({
+        timeout: 30000
+      })
 
       // Axios request interceptor
-      axios.interceptors.request.use(
+      axiosClient.interceptors.request.use(
         (config) => {
           // Reset retry count for each new request
           retryCount = 0;
@@ -141,7 +212,7 @@ export class DomainService {
       );
 
       // Axios response interceptor
-      axios.interceptors.response.use(
+      axiosClient.interceptors.response.use(
         (response) => {
           // Check if the response contains an error object
           if (response.data && response.data.error && retryCount < maxRetries) {
@@ -190,7 +261,7 @@ export class DomainService {
       );
 
       // Axios response interceptor
-      axios.interceptors.response.use(
+      axiosClient.interceptors.response.use(
         (response) => {
           // Check if the response contains an error object
           if (response.data && response.data.error && retryCount < maxRetries) {
@@ -227,13 +298,44 @@ export class DomainService {
       );
 
       const uniqueID = this.generateUniqueID();
-      const response = await axios.get(
+      await axiosClient.get(
         `https://www.enskit.com/api/domain-appraisal-free?domain=${domainName}&r=0.${uniqueID}`,
-      );
+      ).then(res => data = res.data)
+        .catch(async error => {
+          if (axios.isCancel(error)) {
+            data = await this.rateDomain(domainName);
+          } else {
+            throw new HttpException(
+              'Something went wrong trying to appraise domain',
+              HttpStatus.INTERNAL_SERVER_ERROR,
+            );
+          }
+        });
 
-      return response.data;
+      return data;
     } catch (error) {
       throw new HttpException(error.message, error.status);
+    }
+  }
+
+  async getEthPrice() {
+    try {
+      // Make a GET request to the CoinGecko API to fetch Ethereum (ETH) price in USD
+      const response = await axios.get('https://api.coingecko.com/api/v3/simple/price', {
+        params: {
+          ids: 'ethereum',
+          vs_currencies: 'usd',
+        },
+      });
+
+      // Extract the Ethereum price from the response
+      const ethPriceInUSD = response.data.ethereum.usd;
+
+      return ethPriceInUSD;
+    } catch (error) {
+      // Handle any errors that may occur during the API request
+      console.error('Error fetching Ethereum price:', error.message);
+      throw error;
     }
   }
 

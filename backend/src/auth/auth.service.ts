@@ -182,7 +182,8 @@ export class AuthService {
 
       const tokens = await this.getTokens(user._id.toString(), user.email);
       await this.updateRtHash(user._id.toString(), tokens.refresh_token);
-      return tokens;
+      const { password, ...userWithout } = user.toObject();
+      return { ...userWithout, ...tokens };
     } catch (error) {
       CatchExceptionHandler(error);
     }
