@@ -31,6 +31,7 @@ const Navbar: React.FC<{
       <section className="h-full flex items-center justify-start">
         <figure
           className="relative mr-[30px] w-[200px] h-[80%] cursor-pointer max-tablet:ml-[-35px]"
+          onClick={()=>router.push("/")}
         >
           <Image src={logo} alt={"Ens logo"} fill />
         </figure>

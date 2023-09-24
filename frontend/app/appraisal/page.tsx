@@ -18,6 +18,7 @@ import NavModal from "../components/NavModal";
 import useAuth from "../../hooks/useAuth";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { UserContext } from "../../context/UserContext";
 
 type SimilarDomainItemProps = {
   name: string;
@@ -54,8 +55,10 @@ const OtherDomainItem: React.FC<{ name: string }> = ({ name }) => {
 
 const Appraisal: React.FC = () => {
   const [appraiseData, setAppraiseData] = useState<any>(null);
+  const { userState, setUserState } = useContext(UserContext);
   const router = useRouter();
-  useEffect(() => {
+
+  const useLocalAppraiseData = () => {
     const loadedAppraiseData = JSON.parse(
       localStorage.getItem("Appraise-data") as string
     );
@@ -64,8 +67,17 @@ const Appraisal: React.FC = () => {
       loadedAppraiseData == undefined ||
       !loadedAppraiseData
     ) {
-      toast.error("Error fetching appraisal data. Please try again.");
-      setTimeout(() => router.push("/"), 5000);
+      toast.error("Couldn't fetch your appraisal data. Please try again.");
+      return setTimeout(() => router.push("/"), 5000);
+    }
+    setAppraiseData(loadedAppraiseData);
+  };
+
+  useEffect(() => {
+    if (userState.userData.appraisedData == undefined) {
+      useLocalAppraiseData();
+    } else {
+      setAppraiseData(userState.userData.appraisedData);
     }
   }, []);
   const { modalOpen, setModalOpen } = useContext(NavModalContext);

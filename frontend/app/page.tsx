@@ -46,41 +46,45 @@ const Home: React.FC = () => {
   const { modalOpen, setModalOpen } = useContext(NavModalContext);
   const { userState, setUserState } = useContext(UserContext);
   const [domain, setDomain] = useState<string>("");
-  const router = useRouter()
+  const router = useRouter();
 
   const handleAppraiseRes = (data: any, loadingToast: any) => {
     if (data.statusCode == 200) {
       toast.dismiss(loadingToast);
       toast.success("Domain Appraised!");
       const appraisedData = data.data;
-      localStorage.setItem("Appraise-data", JSON.stringify(appraisedData))
-      return router.push("/appraisal")
+      setUserState({
+        ...userState,
+        userData: { ...userState.userData, appraisedData },
+      });
+      localStorage.setItem("Appraise-data", JSON.stringify(appraisedData));
+      return router.push("/appraisal");
     }
 
-    toast.dismiss(loadingToast)
-    toast.error("Network error. Please retry.")
+    toast.dismiss(loadingToast);
+    toast.error(data.message);
   };
 
   const callAPI = async () => {
     let res;
-    if (userState.isLoggedIn) {
-      let token = localStorage.getItem("access_token");
-      if (token !== undefined) {
-        if (token !== null) {
-          token = JSON.parse(token);
-        }
-      }
-      res = await axios.post(
-        "/api/appraisal/paid",
-        { domainName: domain, token },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      return res;
-    }
+    // if (userState.isLoggedIn) {
+    //   let token = localStorage.getItem("access_token");
+    //   if (token !== undefined) {
+    //     if (token !== null) {
+    //       token = JSON.parse(token);
+    //     }
+    //   }
+    //   res = await axios.post(
+    //     "/api/appraisal/paid",
+    //     { domainName: domain, token },
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     }
+    //   );
+    //   return res;
+    // }
 
     res = await axios.post("/api/appraisal/trial", domain, {
       headers: {
@@ -104,7 +108,7 @@ const Home: React.FC = () => {
       toast.error("Network error. Please retry.");
     }
   };
-  useAuth()
+  useAuth();
 
   return (
     <main className="relative overflow-x-hidden flex min-h-screen flex-col items-center justify-between bg-bodyPurple">
