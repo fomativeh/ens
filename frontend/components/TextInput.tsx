@@ -42,7 +42,7 @@ const TextInput: React.FC<TextInputProps> = ({
         />
         {type && type == "Password" && (
           <section
-            className="absolute right-[10px] bottom-0 w-[18px] h-[45px] cursor-pointer"
+            className="absolute right-[15px] bottom-0 w-[18px] h-[45px] cursor-pointer"
             onClick={toggleField}
           >
             <figure className="relative w-full h-full">

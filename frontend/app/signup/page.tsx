@@ -22,6 +22,7 @@ const Signup: React.FC = () => {
   const [lastname, setLastname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [agreed, setAgreed] = useState<boolean>(false)
   const { modalOpen, setModalOpen } = useContext(NavModalContext);
 
   const validateCredentials = () => {
@@ -159,11 +160,12 @@ const Signup: React.FC = () => {
               <section className="flex items-start justify-start">
                 <input
                   type="checkbox"
-                  name=""
-                  id=""
-                  className="mr-[10px] cursor-pointer"
+                  name="terms"
+                  id="terms"
+                  className="mr-[10px] cursor-pointer w-[30px] h-[30px]"
+                  onChange={(e)=>setAgreed(e.target.checked)}
                 />
-                <span className="mb-[20px]">
+                <label className="mb-[20px] cursor-pointer" htmlFor="terms">
                   You acknowledge that you have read and agreed to our
                   <Link href={"/"}>
                     <span className="text-[#9747FF] mx-[5px]">
@@ -176,9 +178,9 @@ const Signup: React.FC = () => {
                       Privacy Policy
                     </span>
                   </Link>
-                </span>
+                </label>
               </section>
-              <Button text={"Sign up"} authBtn={true} boldText={true} />
+              {agreed && <Button text={"Sign up"} authBtn={true} boldText={true} />}
             </section>
           </form>
         </AuthWrapper>
