@@ -28,6 +28,7 @@ const Login: React.FC = () => {
   const [lastname, setLastname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
   const { modalOpen, setModalOpen } = useContext(NavModalContext);
   const validateCredentials = () => {
     if (email.trim() == "") {
@@ -54,7 +55,7 @@ const Login: React.FC = () => {
       //Handle action
       toast.success("Welcome.");
       setUserState({ isLoggedIn: true, userData: data.data });
-      const { access_token,_id, refresh_token } = data.data;
+      const { access_token, _id, refresh_token } = data.data;
       localStorage.setItem("userid", JSON.stringify(_id));
       localStorage.setItem("access_token", JSON.stringify(access_token));
       localStorage.setItem("refresh_token", JSON.stringify(refresh_token));
@@ -63,7 +64,6 @@ const Login: React.FC = () => {
 
     toast.dismiss(loadingToast);
     let errorMessage = data.message;
-    //Returns error message from server, checks if it comes in an array or not
     return toast.error(errorMessage);
   };
 
@@ -79,7 +79,6 @@ const Login: React.FC = () => {
       lastname,
       email,
       password,
-      plan: "basic_plan",
     };
     const loadingToast = toast.loading("Signing in. Please wait...");
 
