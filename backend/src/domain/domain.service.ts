@@ -123,9 +123,9 @@ export class DomainService {
         );
       }
 
-      if (!appraisalResult.domainName) {
-        appraisalResult = await this.rateDomain(domainName);
-      }
+      // if (!appraisalResult.domainName) {
+      //   appraisalResult = await this.rateDomain(domainName);
+      // }
 
       const update = {
         name: domainName,
@@ -185,9 +185,9 @@ export class DomainService {
   private async fetchAppraisal({ domainName }) {
     try {
       // Initialize retry count and maximum retries
-      let retryCount = 0;
-      const maxRetries = 3;
-      const delay = 1000; // 1 second delay between retries
+      // let retryCount = 0;
+      // const maxRetries = 3;
+      // const delay = 1000; // 1 second delay between retries
       let data: AppraisedData;
 
       // const axiosClient = axios.create({
@@ -211,101 +211,101 @@ export class DomainService {
         },
       });
 
-      // Axios request interceptor
-      axiosClient.interceptors.request.use(
-        (config) => {
-          // Reset retry count for each new request
-          retryCount = 0;
-          return config;
-        },
-        (error) => Promise.reject(error),
-      );
+      // // Axios request interceptor
+      // axiosClient.interceptors.request.use(
+      //   (config) => {
+      //     // Reset retry count for each new request
+      //     retryCount = 0;
+      //     return config;
+      //   },
+      //   (error) => Promise.reject(error),
+      // );
 
-      // Axios response interceptor
-      axiosClient.interceptors.response.use(
-        (response) => {
-          // Check if the response contains an error object
-          if (response.data && response.data.error && retryCount < maxRetries) {
-            // Increment retry count
-            retryCount++;
+      // // Axios response interceptor
+      // axiosClient.interceptors.response.use(
+      //   (response) => {
+      //     // Check if the response contains an error object
+      //     if (response.data && response.data.error && retryCount < maxRetries) {
+      //       // Increment retry count
+      //       retryCount++;
 
-            // Delay and retry the request with modified uniqueID
-            return new Promise((resolve) => {
-              setTimeout(() => {
-                const config = response.config;
-                const newUniqueID = this.generateUniqueID();
-                config.url = config.url.replace(
-                  /r=0\.\w+/,
-                  `r=0.${newUniqueID}`,
-                );
-                resolve(axios(config));
-              }, delay);
-            });
-          }
+      //       // Delay and retry the request with modified uniqueID
+      //       return new Promise((resolve) => {
+      //         setTimeout(() => {
+      //           const config = response.config;
+      //           const newUniqueID = this.generateUniqueID();
+      //           config.url = config.url.replace(
+      //             /r=0\.\w+/,
+      //             `r=0.${newUniqueID}`,
+      //           );
+      //           resolve(axios(config));
+      //         }, delay);
+      //       });
+      //     }
 
-          return response;
-        },
-        (error) => {
-          // Check if the error can be retried and if the maximum retry count has been reached
-          if (error.config && retryCount < maxRetries) {
-            // Increment retry count
-            retryCount++;
+      //     return response;
+      //   },
+      //   (error) => {
+      //     // Check if the error can be retried and if the maximum retry count has been reached
+      //     if (error.config && retryCount < maxRetries) {
+      //       // Increment retry count
+      //       retryCount++;
 
-            // Delay and retry the request with modified uniqueID
-            return new Promise((resolve) => {
-              setTimeout(() => {
-                const config = error.config;
-                const newUniqueID = this.generateUniqueID();
-                config.url = config.url.replace(
-                  /r=0\.\w+/,
-                  `r=0.${newUniqueID}`,
-                );
-                resolve(axios(config));
-              }, delay);
-            });
-          }
+      //       // Delay and retry the request with modified uniqueID
+      //       return new Promise((resolve) => {
+      //         setTimeout(() => {
+      //           const config = error.config;
+      //           const newUniqueID = this.generateUniqueID();
+      //           config.url = config.url.replace(
+      //             /r=0\.\w+/,
+      //             `r=0.${newUniqueID}`,
+      //           );
+      //           resolve(axios(config));
+      //         }, delay);
+      //       });
+      //     }
 
-          // Reject the promise if the error cannot be retried or maximum retries reached
-          return Promise.reject(error);
-        },
-      );
+      //     // Reject the promise if the error cannot be retried or maximum retries reached
+      //     return Promise.reject(error);
+      //   },
+      // );
 
-      // Axios response interceptor
-      axiosClient.interceptors.response.use(
-        (response) => {
-          // Check if the response contains an error object
-          if (response.data && response.data.error && retryCount < maxRetries) {
-            // Increment retry count
-            retryCount++;
+      // // Axios response interceptor
+      // axiosClient.interceptors.response.use(
+      //   (response) => {
+      //     // Check if the response contains an error object
+      //     if (response.data && response.data.error && retryCount < maxRetries) {
+      //       // Increment retry count
+      //       retryCount++;
 
-            // Delay and retry the request
-            return new Promise((resolve) => {
-              setTimeout(() => {
-                resolve(axios(response.config));
-              }, delay);
-            });
-          }
+      //       // Delay and retry the request
+      //       return new Promise((resolve) => {
+      //         setTimeout(() => {
+      //           resolve(axios(response.config));
+      //         }, delay);
+      //       });
+      //     }
 
-          return response;
-        },
-        (error) => {
-          // Check if the error can be retried and if the maximum retry count has been reached
-          if (error.config && retryCount < maxRetries) {
-            // Increment retry count
-            retryCount++;
+      //     return response;
+      //   },
+      //   (error) => {
+      //     // Check if the error can be retried and if the maximum retry count has been reached
+      //     if (error.config && retryCount < maxRetries) {
+      //       // Increment retry count
+      //       retryCount++;
 
-            // Delay and retry the request
-            return new Promise((resolve) => {
-              setTimeout(() => {
-                resolve(axios(error.config));
-              }, delay);
-            });
-          }
+      //       // Delay and retry the request
+      //       return new Promise((resolve) => {
+      //         setTimeout(() => {
+      //           resolve(axios(error.config));
+      //         }, delay);
+      //       });
+      //     }
 
-          // Reject the promise if the error cannot be retried or maximum retries reached
-          return Promise.reject(error);
-        },
-      );
+      //     // Reject the promise if the error cannot be retried or maximum retries reached
+      //     return Promise.reject(error);
+      //   },
+      // );
 
       const uniqueID = this.generateUniqueID();
       await axiosClient
@@ -317,6 +317,7 @@ export class DomainService {
         )
         .then((res) => (data = res.data))
         .catch(async (error) => {
+          console.log({ m: error.message });
           if (axios.isCancel(error)) {
             data = await this.rateDomain(domainName);
           } else {
