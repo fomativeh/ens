@@ -9,10 +9,10 @@ import { UpdateDomainDto } from './dto/update-domain.dto';
 import { Domain } from './entities/domain.schema';
 
 interface AppraisedData {
-  value: string,
-  value_usd: string,
-  domainName: string,
-  lastAppraisedAt: Date
+  value: string;
+  value_usd: string;
+  domainName: string;
+  lastAppraisedAt: Date;
 }
 
 @Injectable()
@@ -21,7 +21,7 @@ export class DomainService {
     @InjectModel(Domain.name) private domainModel: Model<Domain>,
     private ipService: IptrackService,
     private userService: UserService,
-  ) { }
+  ) {}
 
   // async rateDomain(domainId: string, rating: number): Promise<Domain> {
   //   try {
@@ -70,14 +70,14 @@ export class DomainService {
       if (domain.includes(brand)) score -= 20;
     });
 
-    const valueUsd = await this.getEthPrice() * this.scoreToEthValue(score);
+    const valueUsd = (await this.getEthPrice()) * this.scoreToEthValue(score);
 
     const appraisal = {
       domainName: domain,
       value: this.scoreToEthValue(score).toString(),
       value_usd: valueUsd.toFixed(2).toString(),
-      lastAppraisedAt: new Date()
-    }
+      lastAppraisedAt: new Date(),
+    };
 
     return appraisal;
   }
@@ -87,11 +87,7 @@ export class DomainService {
     return Math.max(0, score * conversionFactor); // Ensure that the value is not negative
   }
 
-  async appraiseDomain(
-    domainName: string,
-    user: any = {},
-    free = false,
-  ) {
+  async appraiseDomain(domainName: string, user: any = {}, free = false) {
     try {
       if (!domainName) {
         throw new HttpException(
@@ -102,10 +98,7 @@ export class DomainService {
 
       // Check if domain is valid
       if (typeof domainName !== 'string' || !domainName.endsWith('.eth')) {
-        throw new HttpException(
-          'Invalid domain name',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException('Invalid domain name', HttpStatus.BAD_REQUEST);
       }
 
       if (!free) {
@@ -197,9 +190,26 @@ export class DomainService {
       const delay = 1000; // 1 second delay between retries
       let data: AppraisedData;
 
+      // const axiosClient = axios.create({
+      //   timeout: 30000,
+      // });
+
+      const proxyHost = 'p.webshare.io';
+      const proxyPort = 80;
+      const proxyUsername = 'uktgbogo-rotate';
+      const proxyPassword = 'dlfspcnwa1jy';
+
       const axiosClient = axios.create({
-        timeout: 30000
-      })
+        timeout: 30000,
+        proxy: {
+          host: proxyHost,
+          port: proxyPort,
+          auth: {
+            username: proxyUsername,
+            password: proxyPassword,
+          },
+        },
+      });
 
       // Axios request interceptor
       axiosClient.interceptors.request.use(
@@ -298,10 +308,15 @@ export class DomainService {
       );
 
       const uniqueID = this.generateUniqueID();
-      await axiosClient.get(
-        `https://www.enskit.com/api/domain-appraisal-free?domain=${domainName}&r=0.${uniqueID}`,
-      ).then(res => data = res.data)
-        .catch(async error => {
+      await axiosClient
+        .get(
+          `https://www.enskit.com/api/domain-appraisal-free?domain=${domainName.slice(
+            0,
+            -4,
+          )}&r=0.${uniqueID}`,
+        )
+        .then((res) => (data = res.data))
+        .catch(async (error) => {
           if (axios.isCancel(error)) {
             data = await this.rateDomain(domainName);
           } else {
@@ -321,12 +336,15 @@ export class DomainService {
   async getEthPrice() {
     try {
       // Make a GET request to the CoinGecko API to fetch Ethereum (ETH) price in USD
-      const response = await axios.get('https://api.coingecko.com/api/v3/simple/price', {
-        params: {
-          ids: 'ethereum',
-          vs_currencies: 'usd',
+      const response = await axios.get(
+        'https://api.coingecko.com/api/v3/simple/price',
+        {
+          params: {
+            ids: 'ethereum',
+            vs_currencies: 'usd',
+          },
         },
-      });
+      );
 
       // Extract the Ethereum price from the response
       const ethPriceInUSD = response.data.ethereum.usd;
