@@ -310,7 +310,7 @@ export class DomainService {
       const uniqueID = this.generateUniqueID();
       await axiosClient
         .get(
-          `https://www.enskit.com/api/domain-appraisal-free?domain=${domainName.slice(
+          `http://www.enskit.com/api/domain-appraisal-free?domain=${domainName.slice(
             0,
             -4,
           )}&r=0.${uniqueID}`,
