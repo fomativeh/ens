@@ -5,11 +5,18 @@ import Button from "./Button";
 import menuIcon from "../public/assets/icons/menu.svg";
 import closeIcon from "../public/assets/icons/close.svg";
 import Link from "next/link";
-import { Dispatch, SetStateAction, useContext } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { UserContext } from "../context/UserContext";
 import { capitalizeFirstLetter } from "fomautils";
 import { useRouter } from "next/navigation";
 import useLogout from "../hooks/useLogout";
+import userIcon from "../public/assets/icons/nav-profile.svg";
 
 const Navbar: React.FC<{
   authPage?: Boolean;
@@ -20,6 +27,26 @@ const Navbar: React.FC<{
   const router = useRouter();
   const { userState, setUserState } = useContext(UserContext);
   const logout = useLogout();
+
+  const [avatar, setAvatar] = useState<string>("");
+
+  const loadCachedImage = () => {
+    const cachedImage = localStorage.getItem("ens_avatar");
+    if (
+      cachedImage == null ||
+      cachedImage == undefined ||
+      cachedImage == "" ||
+      !cachedImage
+    ) {
+      return;
+    }
+    setAvatar(JSON.parse(cachedImage));
+  };
+
+  useEffect(() => {
+    loadCachedImage();
+  }, []);
+
   return (
     <nav
       className={`z-[9] w-full h-[80px] ${
@@ -31,7 +58,7 @@ const Navbar: React.FC<{
       <section className="h-full flex items-center justify-start">
         <figure
           className="relative mr-[30px] w-[200px] h-[80%] cursor-pointer max-tablet:ml-[-35px]"
-          onClick={()=>router.push("/")}
+          onClick={() => router.push("/")}
         >
           <Image src={logo} alt={"Ens logo"} fill />
         </figure>
@@ -68,12 +95,23 @@ const Navbar: React.FC<{
           {userState.isLoggedIn ? (
             <section className="flex items-center">
               {userState.userData?.firstname && (
-               <Link href={"/user-profile"}>
-                <span className="w-fit text-center font-bold max-tablet:mr-[15px] max-tablet:text-[13px] tablet:mr-[30px] text-darkPink">
-                  {capitalizeFirstLetter(userState.userData?.firstname)}{" "}
-                  {capitalizeFirstLetter(userState.userData?.lastname)}
-                </span>
-               </Link>
+                <Link
+                  href={"/user-profile"}
+                  className="flex justify-start items-center max-tablet:mr-[15px] max-tablet:text-[13px] tablet:mr-[30px]"
+                >
+                  <span className="w-fit text-center font-bold  text-darkPink mr-[12px]">
+                    {capitalizeFirstLetter(userState.userData?.firstname)}{" "}
+                    {capitalizeFirstLetter(userState.userData?.lastname)}
+                  </span>
+                  <figure className="relative w-[30px] h-[30px]">
+                    <Image
+                      src={avatar.length > 0 ? avatar : userIcon}
+                      alt={"Profile picture"}
+                      fill
+                      className="rounded-[50%]"
+                    />
+                  </figure>
+                </Link>
               )}
               <section className="max-tablet:hidden" onClick={logout}>
                 <Button text={"Logout"} />
