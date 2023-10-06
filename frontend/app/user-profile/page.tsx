@@ -24,6 +24,9 @@ import useAuth from "../../hooks/useAuth";
 import { UserContext } from "../../context/UserContext";
 import { capitalizeFirstLetter } from "fomautils";
 import axios from "axios";
+import profileIcon from "../../public/assets/icons/profile.svg";
+import uploadIcon from "../../public/assets/icons/upload.svg";
+import handleImageUpload from "../../helpers/handleImageUpload";
 
 const ListButton: React.FC<{ text: string; color: string }> = ({
   text,
@@ -197,6 +200,19 @@ const UserProfile: React.FC = () => {
   }, []);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [avatar, setAvatar] = useState<string>("");
+
+  const loadCachedImage = ()=>{
+    const cachedImage = localStorage.getItem("ens_avatar")
+    if(cachedImage==null || cachedImage ==undefined || cachedImage=="" || !cachedImage){
+      return
+    }
+    setAvatar(JSON.parse(cachedImage))
+  }
+
+  useEffect(()=>{
+    loadCachedImage()
+  },[])
   return (
     <main className="relative h-full w-full min-h-screen bg-bodyPurple flex justify-between items-start">
       <DashboardSidebar />
@@ -205,14 +221,36 @@ const UserProfile: React.FC = () => {
       <section className="w-full flex-grow min-h-[100vh] flex flex-col justify-start items-center py-[150px] px-[25px] desktopLG:px-[55px]">
         <section className="w-full flex flex-col desktopLG:flex-row desktopLG:justify-between items-center">
           <section className="flex items-center desktopLG:flex-row flex-col">
-            <figure className="relative w-[240px] h-[240px] desktopLG:mr-[34px]">
-              <Image
-                src={avatar}
-                alt={"Profile picture"}
-                fill
-                className="rounded-[50px]"
+            <section className={`relative w-[240px] h-[240px] desktopLG:mr-[34px] ${avatar.length==0? `bg-[#7F56D9]`:`bg-none`} rounded-[50%] flex justify-center items-center`}>
+              <label
+                htmlFor="avatar"
+                className="absolute top-0 right-[0] cursor-pointer"
+              >
+                <figure className="relative w-[35px] h-[35px] z-[8]">
+                  <Image
+                    src={uploadIcon}
+                    alt={"Upload icon"}
+                    fill
+                    className="rounded-[50px]"
+                  />
+                </figure>
+              </label>
+              <input
+                type="file"
+                onChange={(e) => {handleImageUpload(e, setAvatar)}}
+                id="avatar"
+                accept="image/*"
+                className="hidden"
               />
-            </figure>
+              <figure className={`relative ${avatar.length==0? `w-[80%] h-[80%]`:`w-full h-full`}`}>
+                <Image
+                  src={avatar.length > 0 ? avatar : profileIcon}
+                  alt={"Profile picture"}
+                  fill
+                  className="rounded-[50%]"
+                />
+              </figure>
+            </section>
             {userState?.userData?.firstname && (
               <span className="text-darkPink text-[30px] font-bold mt-[100px] desktopLG:mt-0 desktopLG:mb-0 mb-[30px]">
                 {capitalizeFirstLetter(userState?.userData?.firstname)}{" "}
@@ -273,7 +311,7 @@ const UserProfile: React.FC = () => {
           </section>
         </section>
 
-        <section className="w-full rounded-[10px] bg-[#F8EFFA] flex flex-col justify-start items-left p-[25px] mt-[120px]">
+        {/* <section className="w-full rounded-[10px] bg-[#F8EFFA] flex flex-col justify-start items-left p-[25px] mt-[120px]">
           <h1 className="text-[#B253CB] font-bold text-[20px] tablet:text-[2vw] desktopLG:text-[30px] desktopLG:text-left text-center">
             Domains You Searched For
           </h1>
@@ -319,7 +357,7 @@ const UserProfile: React.FC = () => {
               </section>
             </section>
           </section>
-        </section>
+        </section> */}
       </section>
     </main>
   );
