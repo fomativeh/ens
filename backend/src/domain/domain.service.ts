@@ -7,6 +7,7 @@ import { UserService } from 'src/user/user.service';
 import { CreateDomainDto } from './dto/create-domain.dto';
 import { UpdateDomainDto } from './dto/update-domain.dto';
 import { Domain } from './entities/domain.schema';
+import * as FormData from 'form-data';
 
 interface AppraisedData {
   value: string;
@@ -41,40 +42,27 @@ export class DomainService {
   // }
 
   async rateDomain(domain: string) {
-    // Initialize score
-    let score = 0;
+    const form = new FormData();
+    form.append('domain', domain);
 
-    // Define common words and brand names
-    const commonWords = ['finance', 'swap', 'crypto', 'token', 'coin', 'defi'];
-    const brandNames = ['ethereum', 'bitcoin', 'binance'];
+    const modelurl = 'http://51.20.71.5';
 
-    // 1. Check domain length
-    // Shorter domains are generally considered more valuable
-    const lengthScore = Math.max(0, 20 - domain.length);
-    score += lengthScore;
+    const res: { data: { appraisal: number[] } } = await axios.post(
+      modelurl,
+      form,
+      {
+        headers: {
+          ...form.getHeaders(),
+        },
+      },
+    );
+    const val = res.data.appraisal[0];
 
-    // 2. Check for numbers
-    // Domains without numbers are generally considered more valuable
-    const numberScore = domain.match(/\d+/g) ? -10 : 10;
-    score += numberScore;
-
-    // 3. Check for common words
-    // Domains containing common words related to the crypto industry are considered more valuable
-    commonWords.forEach((word) => {
-      if (domain.includes(word)) score += 5;
-    });
-
-    // 4. Check for brand names
-    // Domains containing brand names might be considered less valuable due to legal issues
-    brandNames.forEach((brand) => {
-      if (domain.includes(brand)) score -= 20;
-    });
-
-    const valueUsd = (await this.getEthPrice()) * this.scoreToEthValue(score);
+    const valueUsd = (await this.getEthPrice()) * val;
 
     const appraisal = {
       domainName: domain,
-      value: this.scoreToEthValue(score).toString(),
+      value: val.toString(),
       value_usd: valueUsd.toFixed(2).toString(),
       lastAppraisedAt: new Date(),
     };
@@ -114,7 +102,7 @@ export class DomainService {
         }
       }
 
-      let appraisalResult = await this.fetchAppraisal({ domainName });
+      const appraisalResult = await this.fetchAppraisal({ domainName });
 
       if (!appraisalResult) {
         throw new HttpException(
@@ -196,8 +184,8 @@ export class DomainService {
 
       const proxyHost = 'p.webshare.io';
       const proxyPort = 80;
-      const proxyUsername = 'uktgbogo-rotate';
-      const proxyPassword = 'dlfspcnwa1jy';
+      const proxyUsername = 'qjobixba-rotate';
+      const proxyPassword = '97dvpme9d8hm';
 
       const axiosClient = axios.create({
         timeout: 30000,
@@ -310,7 +298,7 @@ export class DomainService {
       const uniqueID = this.generateUniqueID();
       await axiosClient
         .get(
-          `http://www.enskit.com/api/domain-appraisal-free?domain=${domainName.slice(
+          `http://www.domainsroom.com/api/domain-appraisal-free?domain=${domainName.slice(
             0,
             -4,
           )}&r=0.${uniqueID}`,
@@ -318,14 +306,14 @@ export class DomainService {
         .then((res) => (data = res.data))
         .catch(async (error) => {
           console.log({ m: error.message });
-          if (axios.isCancel(error)) {
-            data = await this.rateDomain(domainName);
-          } else {
-            throw new HttpException(
-              'Something went wrong trying to appraise domain',
-              HttpStatus.INTERNAL_SERVER_ERROR,
-            );
-          }
+          // if (axios.isCancel(error)) {
+          data = await this.rateDomain(domainName);
+          // } else {
+          //   throw new HttpException(
+          //     'Something went wrong trying to appraise domain',
+          //     HttpStatus.INTERNAL_SERVER_ERROR,
+          //   );
+          // }
         });
 
       return data;
