@@ -30,7 +30,6 @@ const useAuth = () => {
                 if (!userData.data.email) {
                     toast.dismiss(loadingToast);
                     return toast.error("Please login again to fetch your details.");
-
                 }
 
                 setUserState({ isLoggedIn: true, userData: userData.data });

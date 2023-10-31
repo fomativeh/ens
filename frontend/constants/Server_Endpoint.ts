@@ -1,1 +1,1 @@
-export const Server_Endpoint: string = "https://ens-site-backend.onrender.com"
+export const Server_Endpoint: string = "https://ens-production.up.railway.app"
