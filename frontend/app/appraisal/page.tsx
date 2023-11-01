@@ -110,7 +110,7 @@ const Appraisal: React.FC = () => {
 
             <section className="flex items-center">
               <span className="text-[#F0EBFA] max-tablet:text-[15px] text-[28px] font-bold">
-                {appraiseData?.appraisedValue}
+                {appraiseData?.appraisedValue.toFixed(2)}
               </span>
               <figure className="w-[30px] h-[30px] relative">
                 <Image alt={"Eth icon"} src={ethIcon} fill />
